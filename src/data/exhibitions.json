@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "type": "exhibition",
+    "title": "Archive Selections: Academic Drawings",
+    "year": 2009,
+    "description": "A curated selection of academic drawing exercises highlighting classical study methods.",
+    "image": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    "id": 2,
+    "type": "exhibition",
+    "title": "Urban Perspectives of Riga",
+    "year": 2012,
+    "description": "Street and square perspectives from student portfolios across several decades.",
+    "image": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    "id": 3,
+    "type": "exhibition",
+    "title": "Interior Worlds: Perspective & Detail",
+    "year": 2014,
+    "description": "Interior perspective drawings paired with construction detail sequences and material studies.",
+    "image": "/images/exhibitions/exhibition3.jpg"
+  },
+  {
+    "id": 4,
+    "type": "exhibition",
+    "title": "Measured Surveys & Historical Surveys",
+    "year": 2016,
+    "description": "Documentation work supporting conservation thinking: plans, sections, and façade records.",
+    "image": "/images/exhibitions/exhibition4.jpg"
+  },
+  {
+    "id": 5,
+    "type": "exhibition",
+    "title": "Sketchbook Culture at RTU",
+    "year": 2018,
+    "description": "Field sketches and travel notebooks showing fast observation and narrative annotation.",
+    "image": "/images/exhibitions/exhibition5.jpg"
+  },
+  {
+    "id": 6,
+    "type": "exhibition",
+    "title": "Environment Drawings: Humans in Context",
+    "year": 2019,
+    "description": "Urban and landscape drawings with human scale cues and movement studies.",
+    "image": "/images/exhibitions/exhibition6.jpg"
+  },
+  {
+    "id": 7,
+    "type": "exhibition",
+    "title": "Technical Clarity",
+    "year": 2020,
+    "description": "A showcase of technical drawing standards, notation systems, and detail legibility.",
+    "image": "/images/exhibitions/exhibition7.jpg"
+  },
+  {
+    "id": 8,
+    "type": "exhibition",
+    "title": "Concept to Board: Final Presentation Drawings",
+    "year": 2022,
+    "description": "Architectural final presentation boards tracing concept development through studio iterations.",
+    "image": "/images/exhibitions/exhibition8.jpg"
+  },
+  {
+    "id": 9,
+    "type": "exhibition",
+    "title": "Archive Futures: Visualization & Research",
+    "year": 2023,
+    "description": "Theme visualizations and research drawings linking historical material to contemporary methods.",
+    "image": "/images/exhibitions/exhibition9.jpg"
+  },
+  {
+    "id": 10,
+    "type": "exhibition",
+    "title": "Architecture Exhibition",
+    "year": 2024,
+    "description": "An annual exhibition presenting curated archive highlights alongside new student work.",
+    "image": "/images/exhibitions/exhibition10.jpg"
+  }
+]
+

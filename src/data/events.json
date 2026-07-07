@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "type": "event",
+    "title": "Birth of Architectural Education at RTU",
+    "year": 1869,
+    "decade": 1860,
+    "description": "Early curriculum begins formalizing architectural drawing and measurement as core competencies.",
+    "image": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    "id": 2,
+    "type": "event",
+    "title": "First Public Student Drawing Display",
+    "year": 1892,
+    "decade": 1890,
+    "description": "A small public display of student works introduces academic drawing to a broader audience.",
+    "image": "https://images.unsplash.com/photo-1577083552431-6e5fd01988a4?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    "id": 3,
+    "type": "event",
+    "title": "Introduction of Measured Survey Coursework",
+    "year": 1904,
+    "decade": 1900,
+    "description": "Measured survey and documentation practices become a regular part of studio training.",
+    "image": "/images/events/surveys.jpg"
+  },
+  {
+    "id": 4,
+    "type": "event",
+    "title": "Expansion of Interior Perspective Studies",
+    "year": 1913,
+    "decade": 1910,
+    "description": "Interior perspective and construction detail drawing receive dedicated lecture blocks.",
+    "image": "/images/events/interiors.jpg"
+  },
+  {
+    "id": 5,
+    "type": "event",
+    "title": "Archive Cataloging Method Adopted",
+    "year": 1926,
+    "decade": 1920,
+    "description": "Systematic labeling and cataloging begins, enabling later digitization and cross-referencing.",
+    "image": "/images/events/cataloging.jpg"
+  },
+  {
+    "id": 6,
+    "type": "event",
+    "title": "Historic Riga Blocks Documented by Students",
+    "year": 1935,
+    "decade": 1930,
+    "description": "Student fieldwork produces façade studies and measured drawings for key historic streets.",
+    "image": "/images/events/riga-blocks.jpg"
+  },
+  {
+    "id": 7,
+    "type": "event",
+    "title": "Technical Drafting Standards Updated",
+    "year": 1957,
+    "decade": 1950,
+    "description": "Curriculum updates align technical drawings with contemporary drafting standards and notation.",
+    "image": "/images/events/standards.jpg"
+  },
+  {
+    "id": 8,
+    "type": "event",
+    "title": "Environment Drawing Module Introduced",
+    "year": 1964,
+    "decade": 1960,
+    "description": "Urban, landscape, and human-in-environment studies become a structured coursework track.",
+    "image": "/images/events/environment.jpg"
+  },
+  {
+    "id": 9,
+    "type": "event",
+    "title": "Archive Conservation Initiative",
+    "year": 1979,
+    "decade": 1970,
+    "description": "Preservation efforts stabilize paper materials and improve storage and handling procedures.",
+    "image": "/images/events/conservation.jpg"
+  },
+  {
+    "id": 10,
+    "type": "event",
+    "title": "Diagrammatic Research Drawings Added",
+    "year": 1992,
+    "decade": 1990,
+    "description": "Research drawings and typology diagrams become part of studio deliverables.",
+    "image": "/images/events/diagrams.jpg"
+  },
+  {
+    "id": 11,
+    "type": "event",
+    "title": "First Digital Scanning Pilot",
+    "year": 2003,
+    "decade": 2000,
+    "description": "A pilot scanning workflow tests digitization quality, naming conventions, and metadata needs.",
+    "image": "/images/events/scanning.jpg"
+  },
+  {
+    "id": 12,
+    "type": "event",
+    "title": "Archive Website Concept Approved",
+    "year": 2012,
+    "decade": 2010,
+    "description": "A concept for a searchable digital archive is approved to support teaching and research.",
+    "image": "/images/events/website.jpg"
+  },
+  {
+    "id": 13,
+    "type": "event",
+    "title": "Public Exhibition Series Launch",
+    "year": 2017,
+    "decade": 2010,
+    "description": "Regular exhibitions highlight student drawing heritage and connect to contemporary studio practice.",
+    "image": "/images/events/exhibition-series.jpg"
+  },
+  {
+    "id": 14,
+    "type": "event",
+    "title": "Expanded Metadata Schema Drafted",
+    "year": 2021,
+    "decade": 2020,
+    "description": "Metadata fields are expanded to support filtering by theme, task category, and teacher/student links.",
+    "image": "/images/events/metadata.jpg"
+  },
+  {
+    "id": 15,
+    "type": "event",
+    "title": "Digitization Milestone: 10k Items Prepared",
+    "year": 2026,
+    "decade": 2020,
+    "description": "A major preparation milestone standardizes image handling and improves catalog consistency.",
+    "image": "/images/events/milestone.jpg"
+  }
+]
+

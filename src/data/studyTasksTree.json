@@ -1,0 +1,489 @@
+{
+  "id": "root",
+  "title": "Study Themes",
+  "children": [
+    {
+      "id": "study-case",
+      "title": "Study Case Drawings",
+      "children": [
+        {
+          "id": "academic",
+          "title": "Academic Drawings",
+          "children": [
+            {
+              "id": "academic-sculpture",
+              "title": "Sculpture Studies",
+              "children": [
+                {
+                  "id": "academic-sculpture-antique",
+                  "title": "Antique Sculpture"
+                },
+                {
+                  "id": "academic-sculpture-plaster-models",
+                  "title": "Traditional Plaster Human Models"
+                },
+                {
+                  "id": "academic-sculpture-capitals",
+                  "title": "Classical Plaster Capitals"
+                },
+                {
+                  "id": "academic-sculpture-relief",
+                  "title": "Relief Studies"
+                },
+                {
+                  "id": "academic-sculpture-details",
+                  "title": "Classical Plaster Details"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "urban-perspective",
+          "title": "Urban Perspective Drawings",
+          "children": [
+            {
+              "id": "urban-perspective-sketches",
+              "title": "Sketches"
+            },
+            {
+              "id": "urban-perspective-long",
+              "title": "Long Term Drawings"
+            }
+          ]
+        },
+        {
+          "id": "building-details",
+          "title": "Building Details",
+          "children": [
+            {
+              "id": "building-details-sketches",
+              "title": "Sketches"
+            },
+            {
+              "id": "building-details-long",
+              "title": "Long Term Drawings"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "interior-perspective",
+      "title": "Perspective Drawings of Interior",
+      "children": [
+        {
+          "id": "interior-detail",
+          "title": "Interior Detail Constructions",
+          "children": [
+            {
+              "id": "interior-detail-sketches",
+              "title": "Sketches"
+            },
+            {
+              "id": "interior-detail-long",
+              "title": "Long Term Drawings"
+            }
+          ]
+        },
+        {
+          "id": "design-objects",
+          "title": "Design Object Drawings",
+          "children": [
+            {
+              "id": "design-objects-construction",
+              "title": "Construction Drawings of Interior and Design Objects"
+            },
+            {
+              "id": "design-objects-nature",
+              "title": "Model Drawings from Nature"
+            },
+            {
+              "id": "design-objects-constructive-models",
+              "title": "Constructive Models"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sketchbook",
+      "title": "Architect Sketchbook"
+    },
+    {
+      "id": "research",
+      "title": "Architecture Research Drawings",
+      "children": [
+        {
+          "id": "measurements",
+          "title": "RTU Architectural Measurements – Measured Buildings",
+          "children": [
+            {
+              "id": "measurements-rtu",
+              "title": "Objects by Number of RTU AF-ADI"
+            },
+            {
+              "id": "measurements-vkpai",
+              "title": "Objects by Number of Cultural Heritage VKPAI AF"
+            }
+          ]
+        },
+        {
+          "id": "historical-surveys",
+          "title": "Historical Surveys"
+        }
+      ]
+    },
+    {
+      "id": "theme-visualizations",
+      "title": "Architecture Theme Design Visualizations",
+      "children": [
+        {
+          "id": "theme-domatava",
+          "title": "Domātava"
+        },
+        {
+          "id": "theme-family-house",
+          "title": "Family House"
+        },
+        {
+          "id": "theme-multifunctional-building",
+          "title": "Multifunctional Building"
+        },
+        {
+          "id": "theme-school",
+          "title": "School"
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "title": "Environment Drawings",
+      "children": [
+        {
+          "id": "environment-urban",
+          "title": "Urban Drawings",
+          "children": [
+            {
+              "id": "environment-urban-streets",
+              "title": "Streets, Squares and Urban Details"
+            },
+            {
+              "id": "environment-urban-panoramas",
+              "title": "City Panoramas"
+            },
+            {
+              "id": "environment-urban-mechanical",
+              "title": "Mechanical Tools, Labor Technique"
+            }
+          ]
+        },
+        {
+          "id": "environment-landscape",
+          "title": "Landscape Drawings",
+          "children": [
+            {
+              "id": "environment-landscape-parks",
+              "title": "Parks, Gardens, Living Places"
+            },
+            {
+              "id": "environment-landscape-rural",
+              "title": "Rural Landscapes, Ports"
+            },
+            {
+              "id": "environment-landscape-mechanical",
+              "title": "Mechanical Tools, Labor Technique"
+            },
+            {
+              "id": "environment-landscape-nature",
+              "title": "Studies from Nature (Trees, Stones, Mountains, Plants, Animals)"
+            }
+          ]
+        },
+        {
+          "id": "environment-humans",
+          "title": "Humans in the Environment",
+          "children": [
+            {
+              "id": "environment-human-interior",
+              "title": "Human Scale in Interior",
+              "children": [
+                {
+                  "id": "environment-human-interior-sketches",
+                  "title": "Sketches"
+                },
+                {
+                  "id": "environment-human-interior-long",
+                  "title": "Long Term Drawings"
+                }
+              ]
+            },
+            {
+              "id": "environment-human-urban",
+              "title": "Human Scale in Urban or Rural Landscape",
+              "children": [
+                {
+                  "id": "environment-human-urban-sketches",
+                  "title": "Sketches"
+                },
+                {
+                  "id": "environment-human-urban-long",
+                  "title": "Long Term Drawings"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "title": "Human Studies - Portrait",
+      "children": [
+        {
+          "id": "portrait-sketches",
+          "title": "Sketches"
+        },
+        {
+          "id": "portrait-construction",
+          "title": "Portrait Construction Studies"
+        },
+        {
+          "id": "portrait-long",
+          "title": "Portrait Long Term Drawings"
+        }
+      ]
+    },
+    {
+      "id": "body",
+      "title": "Human Studies - Body",
+      "children": [
+        {
+          "id": "body-sketches",
+          "title": "Sketches"
+        },
+        {
+          "id": "body-construction",
+          "title": "Construction Studies"
+        },
+        {
+          "id": "body-proportions",
+          "title": "Proportional Studies"
+        },
+        {
+          "id": "body-long",
+          "title": "Long Term Drawings"
+        }
+      ]
+    },
+    {
+      "id": "conceptual",
+      "title": "Conceptual Work",
+      "children": [
+        {
+          "id": "conceptual-ideation",
+          "title": "Ideation Process"
+        },
+        {
+          "id": "conceptual-concepts",
+          "title": "Conceptual"
+        },
+        {
+          "id": "conceptual-collages",
+          "title": "Collages"
+        },
+        {
+          "id": "conceptual-geometrical-illusions",
+          "title": "Geometrical Illusions",
+          "children": [
+            {
+              "id": "conceptual-geometrical-drawings",
+              "title": "Drawings"
+            },
+            {
+              "id": "conceptual-geometrical-collages",
+              "title": "Collages"
+            },
+            {
+              "id": "conceptual-geometrical-prints",
+              "title": "Prints"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "final-presentation",
+      "title": "Architectural Final Presentation Drawings",
+      "children": [
+        {
+          "id": "final-diploma",
+          "title": "Diploma Projects",
+          "children": [
+            {
+              "id": "final-diploma-perspectives",
+              "title": "Perspective Drawings"
+            },
+            {
+              "id": "final-diploma-site-plans",
+              "title": "Site Plans"
+            },
+            {
+              "id": "final-diploma-floor-plans",
+              "title": "Floor Plans"
+            },
+            {
+              "id": "final-diploma-posters",
+              "title": "Presentation Posters - Framed Works"
+            }
+          ]
+        },
+        {
+          "id": "final-design-objects",
+          "title": "Architecture Design Objects"
+        },
+        {
+          "id": "final-competitions",
+          "title": "Architecture Competitions"
+        },
+        {
+          "id": "final-model-photos",
+          "title": "Model Photographs"
+        },
+        {
+          "id": "final-cartography",
+          "title": "Design Studio Cartography"
+        },
+        {
+          "id": "applied-graphics",
+          "title": "Applies graphics"
+        },
+        {
+          "id": "architectural-graphics",
+          "title": "Architectural graphics"
+        }
+      ]
+    },
+    {
+      "id": "fantasy",
+      "title": "Fantasy Drawings"
+    },
+    {
+      "id": "professional-studio",
+      "title": "Architect Professional Design Studio Drawings",
+      "children": [
+        {
+          "id": "professional-studio-drawings",
+          "title": "Architect Design Studio Drawings",
+          "children": [
+            {
+              "id": "professional-sketches",
+              "title": "Sketches"
+            },
+            {
+              "id": "professional-measurements",
+              "title": "Measurements"
+            },
+            {
+              "id": "professional-research",
+              "title": "Research"
+            },
+            {
+              "id": "professional-modifying",
+              "title": "Modifying Replicas, Ideations"
+            },
+            {
+              "id": "professional-visualisations",
+              "title": "Visualisations"
+            },
+            {
+              "id": "professional-perspectives",
+              "title": "Perspective Drawings"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "freehand",
+      "title": "Free Hand Visualizations",
+      "children": [
+        {
+          "id": "freehand-techniques",
+          "title": "Artistic Techniques",
+          "children": [
+            {
+              "id": "freehand-drawing",
+              "title": "Drawing"
+            },
+            {
+              "id": "freehand-watercolor",
+              "title": "Watercolor"
+            },
+            {
+              "id": "freehand-collages",
+              "title": "Collages"
+            },
+            {
+              "id": "freehand-digital",
+              "title": "Digital Drawings"
+            },
+            {
+              "id": "freehand-prints",
+              "title": "Prints or Stamps - Monotype, Mixed Media"
+            }
+          ]
+        },
+        {
+          "id": "freehand-project-visualizations",
+          "title": "Project Visualizations of Architect",
+          "children": [
+            {
+              "id": "freehand-project-buildings",
+              "title": "Buildings"
+            },
+            {
+              "id": "freehand-project-sculptures",
+              "title": "Sculptures"
+            },
+            {
+              "id": "freehand-project-accessories",
+              "title": "Interior Accessories"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technical",
+      "title": "Technical Drawings"
+    },
+    {
+      "id": "meditation",
+      "title": "Architect Professional Drawings - Free Time / Meditation / Self Presentation",
+      "children": [
+        {
+          "id": "meditation-drawings",
+          "title": "Drawings"
+        },
+        {
+          "id": "meditation-crayons",
+          "title": "Crayons"
+        },
+        {
+          "id": "meditation-ink",
+          "title": "Ink Drawings"
+        },
+        {
+          "id": "meditation-prints",
+          "title": "Prints"
+        }
+      ]
+    },
+    {
+      "id": "paintings",
+      "title": "Paintings"
+    }
+  ]
+}
+
