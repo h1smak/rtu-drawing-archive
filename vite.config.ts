@@ -4,6 +4,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/rtu-drawing-archive/',
   plugins: [react()],
   resolve: {
     alias: {
