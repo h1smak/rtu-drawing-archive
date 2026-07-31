@@ -4,11 +4,14 @@
     "type": "project",
     "title": "Modern City Center Planning",
     "description": "A comprehensive redesign of the main city square focusing on pedestrian accessibility.",
-    "authorId": "p_003", 
+    "authorId": "p_003",
     "year": 2023,
     "decade": 2020,
-    "teacherId": "p_002", 
-    "images": ["/assets/proj_001_a.jpg", "/assets/proj_001_b.jpg"],
+    "teacherId": "p_002",
+    "images": [
+      "/assets/proj_001_a.jpg",
+      "/assets/proj_001_b.jpg"
+    ],
     "studyTheme": "Urban Planning",
     "keyword": "Architecture",
     "category": "Architectural Final Presentations",
@@ -19,11 +22,13 @@
     "type": "project",
     "title": "Sustainable Housing Complex",
     "description": "Design for an eco-friendly residential area with integrated green spaces.",
-    "authorId": "p_004", 
+    "authorId": "p_004",
     "year": 2022,
     "decade": 2020,
-    "teacherId": "p_001", 
-    "images": ["/assets/proj_002_a.jpg"],
+    "teacherId": "p_001",
+    "images": [
+      "/assets/proj_002_a.jpg"
+    ],
     "studyTheme": "Architecture",
     "keyword": "Architecture",
     "category": "Architecture Theme Design Visualizations",
@@ -34,11 +39,13 @@
     "type": "project",
     "title": "Classical Sculpture Study",
     "description": "Detailed charcoal drawing of a plaster cast.",
-    "authorId": "p_001", 
+    "authorId": "p_001",
     "year": 1995,
     "decade": 1990,
-    "teacherId": "p_001", 
-    "images": ["/assets/proj_003_a.jpg"],
+    "teacherId": null,
+    "images": [
+      "/assets/proj_003_a.jpg"
+    ],
     "studyTheme": "Restoration",
     "keyword": "Architecture",
     "category": "Sculpture Studies",
@@ -49,11 +56,14 @@
     "type": "project",
     "title": "Future City Concepts",
     "description": "Conceptual sketches for a futuristic skyline.",
-    "authorId": "p_003", 
+    "authorId": "p_003",
     "year": 2021,
     "decade": 2020,
-    "teacherId": "p_001", 
-    "images": ["/assets/proj_004_a.jpg", "/assets/proj_004_b.jpg"],
+    "teacherId": "p_001",
+    "images": [
+      "/assets/proj_004_a.jpg",
+      "/assets/proj_004_b.jpg"
+    ],
     "studyTheme": "Architecture",
     "keyword": "Architecture",
     "category": "Fantasy Drawings",
@@ -64,14 +74,16 @@
     "type": "project",
     "title": "Urban Perspective",
     "description": "Study of perspective in a dense urban environment.",
-    "authorId": "p_001", 
+    "authorId": "p_001",
     "year": 1994,
     "decade": 1990,
-    "teacherId": "p_002", 
-    "images": ["/assets/proj_005_a.jpg"],
+    "teacherId": "p_002",
+    "images": [
+      "/assets/proj_005_a.jpg"
+    ],
     "studyTheme": "Form Study",
-    "keyword": "Architecture",
-    "category": "Urban Perspective Drawings",
+    "keyword": "Art",
+    "category": "Artistic Drawings",
     "subcategory": "Sketches"
   }
 ]

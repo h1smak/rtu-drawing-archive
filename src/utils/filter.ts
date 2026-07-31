@@ -115,22 +115,25 @@ export function filterCollections(
   collections: ArchiveCollections,
   state: FilterStateSnapshot,
 ): FilteredResults {
+  const focus = state.focusPerson ?? null
+
   const basePred = (item: Searchable) =>
     includesTimeline(item, state.timeline) &&
     matchesGlobalSearch(item, state.query) &&
     matchesStudyTaskTree(item, collections, state.selectedStudyTaskNodeIds) &&
-    matchesPeopleCategories(item, state, collections) &&
-    matchesAlphabet(item, state.alphabet, collections)
-
-  const focus = state.focusPerson ?? null
+    (focus ? true : matchesPeopleCategories(item, state, collections)) &&
+    (focus ? true : matchesAlphabet(item, state.alphabet, collections))
 
   const projectsRaw = collections.projects.filter(basePred).sort(sortProjects)
+  
+  // Events and Exhibitions are only shown if entityType is 'all' (or if we are in focus mode? 
+  // Wait, if focus is active, they shouldn't show anyway, see below).
   const eventsRaw = state.entityType === 'all' ? collections.events.filter(basePred).sort(sortEvents) : []
   const exhibitionsRaw = state.entityType === 'all' ? collections.exhibitions.filter(basePred).sort(sortExhibitions) : []
 
   // Focus mode overrides list
   const projects = focus
-    ? collections.projects.filter((st) => st.authorId === focus.id || st.teacherId === focus.id).sort(sortProjects)
+    ? projectsRaw.filter((st) => st.authorId === focus.id || st.teacherId === focus.id)
     : projectsRaw
 
   const events = focus ? [] : eventsRaw
