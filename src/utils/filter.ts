@@ -4,6 +4,7 @@ import type {
   Searchable,
   Person,
   Project,
+  StudyTaskTreeNode,
 } from '@/types/archive'
 import { matchesGlobalSearch } from '@/utils/search'
 import { collectDescendantTitles, findNodeById } from '@/utils/studyTasksTree'
@@ -52,6 +53,51 @@ function includesTimeline(
   return true
 }
 
+function findPathToTitle(node: StudyTaskTreeNode, targetTitle: string, currentPath: string[]): string[] | null {
+  const newPath = [...currentPath, node.id]
+  if (node.title === targetTitle) return newPath
+  
+  if (node.children) {
+    for (const child of node.children) {
+      const found = findPathToTitle(child, targetTitle, newPath)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+function getProjectTreePathIds(project: Project, root: StudyTaskTreeNode): Set<string> {
+  const pathIds = new Set<string>()
+  
+  // Find top-level keyword branch
+  const keywordNode = root.children?.find(c => c.title === project.keyword || c.keyword === project.keyword)
+  if (!keywordNode) return pathIds
+  
+  pathIds.add(keywordNode.id)
+  
+  let catPath: string[] | null = null
+  if (project.category) {
+    catPath = findPathToTitle(keywordNode, project.category, [])
+  }
+  
+  if (catPath) {
+    for (const id of catPath) pathIds.add(id)
+    
+    if (project.subcategory) {
+       const catNodeId = catPath[catPath.length - 1]
+       const catNode = findNodeById(keywordNode, catNodeId)
+       if (catNode) {
+          const subCatPath = findPathToTitle(catNode, project.subcategory, [])
+          if (subCatPath) {
+             for (const id of subCatPath) pathIds.add(id)
+          }
+       }
+    }
+  }
+  
+  return pathIds
+}
+
 function matchesStudyTaskTree(
   item: Searchable,
   collections: ArchiveCollections,
@@ -59,15 +105,13 @@ function matchesStudyTaskTree(
 ): boolean {
   if (selectedNodeIds.size === 0) return true
 
-  const titles = new Set<string>()
-  for (const id of selectedNodeIds) {
-    const node = findNodeById(collections.studyTasksTree, id)
-    if (!node) continue
-    for (const t of collectDescendantTitles(node)) titles.add(t)
+  if (item.type === 'project') {
+    const pathIds = getProjectTreePathIds(item, collections.studyTasksTree)
+    for (const selectedId of selectedNodeIds) {
+      if (pathIds.has(selectedId)) return true
+    }
+    return false
   }
-
-  if (item.type === 'project')
-    return (item.category ? titles.has(item.category) : false) || (item.subcategory ? titles.has(item.subcategory) : false)
 
   return true
 }

@@ -69,6 +69,7 @@ export type Exhibition = {
 export type StudyTaskTreeNode = {
   id: string
   title: string
+  keyword?: string
   children?: StudyTaskTreeNode[]
 }
 
