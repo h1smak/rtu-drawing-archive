@@ -7,13 +7,8 @@ import type {
   StudyTaskTreeNode,
 } from '@/types/archive'
 import { matchesGlobalSearch } from '@/utils/search'
-import { collectDescendantTitles, findNodeById } from '@/utils/studyTasksTree'
-import {
-  sortEvents,
-  sortExhibitions,
-  sortPeople,
-  sortProjects,
-} from '@/utils/sort'
+import { findNodeById } from '@/utils/studyTasksTree'
+import { sortEvents, sortExhibitions, sortProjects } from '@/utils/sort'
 
 export type TimelineFilter =
   | { kind: 'all' }
@@ -187,4 +182,3 @@ export function filterCollections(
 
   return { people: [], projects, events, exhibitions, total }
 }
-
