@@ -1,10 +1,11 @@
+import * as React from 'react'
 import { Calendar, GraduationCap, User2 } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import type { Exhibition, HistoricalEvent, Student, StudyTaskItem, Teacher } from '@/types/archive'
+import type { Exhibition, HistoricalEvent, Person, Project } from '@/types/archive'
 
-type CardEntity = Student | Teacher | StudyTaskItem | HistoricalEvent | Exhibition
+type CardEntity = Person | Project | HistoricalEvent | Exhibition
 
 function fallbackInitials(title: string) {
   const parts = title.trim().split(/\s+/).slice(0, 2)
@@ -18,17 +19,17 @@ export function ResultCard({
   onClick,
 }: {
   entity: CardEntity
-  subtitle?: string
+  subtitle?: React.ReactNode
   tags?: string[]
   onClick?: () => void
 }) {
-  const isPerson = entity.type === 'student' || entity.type === 'teacher'
+  const isPerson = entity.type === 'person'
   const title =
-    entity.type === 'student' || entity.type === 'teacher'
+    entity.type === 'person'
       ? `${entity.firstName} ${entity.lastName}`
       : entity.title
 
-  const image = 'image' in entity ? entity.image : undefined
+  const image = 'image' in entity ? entity.image : ('images' in entity ? entity.images?.[0] : undefined)
 
   return (
     <article
@@ -59,7 +60,7 @@ export function ResultCard({
           />
         ) : null}
         <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-muted-foreground/70">
-          {fallbackInitials(title)}
+          {!image && fallbackInitials(title)}
         </div>
       </div>
 
@@ -69,17 +70,22 @@ export function ResultCard({
             <h3 className="truncate text-base font-semibold leading-6">{title}</h3>
             {subtitle ? <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p> : null}
           </div>
-          {entity.type === 'student' ? (
-            <Badge className="shrink-0" variant="muted">
-              <GraduationCap className="mr-1 size-3.5" aria-hidden="true" />
-              {entity.graduatedYear}
-            </Badge>
-          ) : entity.type === 'teacher' ? (
-            <Badge className="shrink-0" variant="muted">
-              <User2 className="mr-1 size-3.5" aria-hidden="true" />
-              {entity.position}
-            </Badge>
-          ) : 'year' in entity ? (
+          {entity.type === 'person' ? (
+            <div className="flex gap-2 shrink-0">
+              {entity.roles.includes('student') && entity.graduatedYear ? (
+                <Badge className="shrink-0" variant="muted">
+                  <GraduationCap className="mr-1 size-3.5" aria-hidden="true" />
+                  {entity.graduatedYear}
+                </Badge>
+              ) : null}
+              {entity.roles.includes('teacher') && entity.position ? (
+                <Badge className="shrink-0" variant="muted">
+                  <User2 className="mr-1 size-3.5" aria-hidden="true" />
+                  {entity.position}
+                </Badge>
+              ) : null}
+            </div>
+          ) : 'year' in entity && entity.year ? (
             <Badge className="shrink-0" variant="muted">
               <Calendar className="mr-1 size-3.5" aria-hidden="true" />
               {entity.year}
@@ -89,15 +95,13 @@ export function ResultCard({
 
         <p className="mt-2 line-clamp-3 text-sm text-foreground/90">{entity.description}</p>
 
-        {isPerson ? (
+        {isPerson && entity.keywords ? (
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {'keywords' in entity
-              ? entity.keywords.map((t) => (
-                  <Badge key={t} variant="secondary">
-                    {t}
-                  </Badge>
-                ))
-              : null}
+            {entity.keywords.map((t) => (
+              <Badge key={t} variant="secondary">
+                {t}
+              </Badge>
+            ))}
           </div>
         ) : tags?.length ? (
           <div className="mt-2 flex flex-wrap gap-1.5">

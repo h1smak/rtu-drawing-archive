@@ -52,44 +52,46 @@ export function ResultsList({
     )
   }
 
-  const teacherById = new Map(collections.teachers.map((t) => [t.id, t]))
-  const studentById = new Map(collections.students.map((s) => [s.id, s]))
+  const personById = new Map(collections.people.map((p) => [p.id, p]))
 
   return (
     <div className="space-y-3">
-      {results.students.map((s) => (
-        <ResultCard
-          key={`student-${s.id}`}
-          entity={s}
-          subtitle={`${s.lifeYears} • ${s.studyPeriod} • ${s.status === 'graduated' ? 'Graduated' : 'Undergraduate'}`}
-          onClick={() => focusOnPerson({ kind: 'student', id: s.id })}
-        />
-      ))}
+      {results.projects.map((proj) => {
+        const author = personById.get(proj.authorId)
+        const teacher = proj.teacherId ? personById.get(proj.teacherId) : null
+        
+        const subtitle = (
+          <span className="flex flex-wrap items-center gap-1">
+            {proj.category && <span>{proj.category}</span>}
+            {proj.subcategory && <span>• {proj.subcategory}</span>}
+            {author && (
+              <>
+                <span>• Author:</span>
+                <span 
+                  className="cursor-pointer font-medium hover:underline text-primary" 
+                  onClick={(e) => { e.stopPropagation(); focusOnPerson({ kind: 'person', id: author.id }) }}
+                >
+                  {author.firstName} {author.lastName}
+                </span>
+              </>
+            )}
+            {teacher && (
+              <>
+                <span>• Teacher:</span>
+                <span 
+                  className="cursor-pointer font-medium hover:underline text-primary" 
+                  onClick={(e) => { e.stopPropagation(); focusOnPerson({ kind: 'person', id: teacher.id }) }}
+                >
+                  {teacher.firstName} {teacher.lastName}
+                </span>
+              </>
+            )}
+            {(proj.year || proj.decade) && <span>• {proj.year || proj.decade}</span>}
+          </span>
+        )
 
-      {results.teachers.map((t) => (
-        <ResultCard
-          key={`teacher-${t.id}`}
-          entity={t}
-          subtitle={`${t.lifeYears} • Appointed ${t.appointedYear} • ${t.specialization}`}
-          onClick={() => focusOnPerson({ kind: 'teacher', id: t.id })}
-        />
-      ))}
-
-      {results.studyTasks.map((st) => {
-        const teacher = teacherById.get(st.teacherId)
-        const student = studentById.get(st.studentId)
-        const subtitle = [
-          st.category,
-          st.subcategory ?? null,
-          student ? `${student.firstName} ${student.lastName}` : null,
-          teacher ? `${teacher.firstName} ${teacher.lastName}` : null,
-          st.decade ? String(st.decade) : null,
-        ]
-          .filter(Boolean)
-          .join(' • ')
-
-        const tags = [st.category, st.subcategory].filter((x): x is string => Boolean(x))
-        return <ResultCard key={`task-${st.id}`} entity={st} subtitle={subtitle} tags={tags} />
+        const tags = [proj.category, proj.subcategory].filter((x): x is string => Boolean(x))
+        return <ResultCard key={`project-${proj.id}`} entity={proj} subtitle={subtitle} tags={tags} />
       })}
 
       {results.events.map((e) => (

@@ -81,12 +81,11 @@ export function ArchivePage() {
 
   const focusLabel = React.useMemo(() => {
     if (!collections || !focusPerson) return null
-    if (focusPerson.kind === 'student') {
-      const s = collections.students.find((x) => x.id === focusPerson.id)
-      return s ? `${s.firstName} ${s.lastName}` : null
+    if (focusPerson.kind === 'person') {
+      const p = collections.people.find((x) => x.id === focusPerson.id)
+      return p ? `${p.firstName} ${p.lastName}` : null
     }
-    const t = collections.teachers.find((x) => x.id === focusPerson.id)
-    return t ? `${t.firstName} ${t.lastName}` : null
+    return null
   }, [collections, focusPerson])
 
   return (
@@ -122,7 +121,7 @@ export function ArchivePage() {
                 </div>
               ) : null}
 
-              <AlphabetFilter />
+              {!focusPerson ? <AlphabetFilter /> : null}
 
               <div className="flex items-center justify-between gap-3 rounded-lg border bg-card px-3 py-2 text-sm">
                 <div className="text-muted-foreground">

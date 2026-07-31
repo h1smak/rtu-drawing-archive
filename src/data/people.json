@@ -1,0 +1,55 @@
+[
+  {
+    "id": "p_001",
+    "type": "person",
+    "roles": ["student", "teacher"],
+    "firstName": "Juris",
+    "lastName": "Kalniņš",
+    "lifeYears": "1970-",
+    "graduatedYear": 1995,
+    "appointedYear": 2000,
+    "decade": 1990,
+    "position": "Professor",
+    "specialization": "Architecture",
+    "keywords": ["Architecture", "Exhibitions"]
+  },
+  {
+    "id": "p_002",
+    "type": "person",
+    "roles": ["student", "teacher"],
+    "firstName": "Līga",
+    "lastName": "Eglīte",
+    "lifeYears": "1982-",
+    "graduatedYear": 2005,
+    "appointedYear": 2015,
+    "decade": 2000,
+    "position": "Docent",
+    "specialization": "Art",
+    "keywords": ["Art"]
+  },
+  {
+    "id": "p_003",
+    "type": "person",
+    "roles": ["student"],
+    "firstName": "Toms",
+    "lastName": "Bērziņš",
+    "lifeYears": "1999-",
+    "graduatedYear": 2023,
+    "status": "graduated",
+    "studyPeriod": "2019-2023",
+    "decade": 2020,
+    "keywords": ["Architecture"]
+  },
+  {
+    "id": "p_004",
+    "type": "person",
+    "roles": ["student"],
+    "firstName": "Maija",
+    "lastName": "Liepiņa",
+    "lifeYears": "2000-",
+    "status": "undergraduate",
+    "studyPeriod": "2020-present",
+    "decade": 2020,
+    "keywords": ["Architecture"]
+  }
+]

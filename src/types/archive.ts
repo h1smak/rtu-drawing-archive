@@ -6,50 +6,45 @@ export type Keywords =
   | 'Exhibitions'
 
 export type StudentStatus = 'graduated' | 'undergraduate'
+export type Role = 'student' | 'teacher'
 
-export type Student = {
-  id: number
-  type: 'student'
+export type Person = {
+  id: string
+  type: 'person'
+  roles: Role[]
   firstName: string
   lastName: string
-  lifeYears: string
-  graduatedYear: number
-  status: StudentStatus
-  studyPeriod: string
-  decade: number
-  image: string
-  description: string
-  keywords: Keywords[]
-  studyTasks: string[]
+  lifeYears?: string
+  decade?: number
+  image?: string
+  description?: string
+  keywords?: Keywords[]
+  
+  // Student specific
+  graduatedYear?: number
+  status?: StudentStatus
+  studyPeriod?: string
+  
+  // Teacher specific
+  position?: string
+  specialization?: 'Architecture' | 'Art'
+  appointedYear?: number
 }
 
-export type Teacher = {
-  id: number
-  type: 'teacher'
-  firstName: string
-  lastName: string
-  lifeYears: string
-  position: string
-  specialization: 'Architecture' | 'Art'
-  appointedYear: number
-  decade: number
-  image: string
-  description: string
-  keywords: Keywords[]
-}
-
-export type StudyTaskItem = {
-  id: number
-  type: 'studyTask'
+export type Project = {
+  id: string
+  type: 'project'
   title: string
-  keyword: Keywords
-  category: string
-  subcategory: string | null
-  decade: number
-  studentId: number
-  teacherId: number
-  image: string
   description: string
+  authorId: string
+  teacherId?: string | null
+  year?: number
+  decade?: number
+  images: string[]
+  studyTheme: string
+  keyword?: Keywords
+  category?: string
+  subcategory?: string | null
 }
 
 export type HistoricalEvent = {
@@ -78,18 +73,16 @@ export type StudyTaskTreeNode = {
 }
 
 export type ArchiveCollections = {
-  students: Student[]
-  teachers: Teacher[]
-  studyTasks: StudyTaskItem[]
+  people: Person[]
+  projects: Project[]
   events: HistoricalEvent[]
   exhibitions: Exhibition[]
   studyTasksTree: StudyTaskTreeNode
 }
 
 export type Searchable =
-  | Student
-  | Teacher
-  | StudyTaskItem
+  | Person
+  | Project
   | HistoricalEvent
   | Exhibition
 

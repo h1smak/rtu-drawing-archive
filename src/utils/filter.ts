@@ -2,18 +2,16 @@ import type {
   ArchiveCollections,
   EntityType,
   Searchable,
-  Student,
-  StudyTaskItem,
-  Teacher,
+  Person,
+  Project,
 } from '@/types/archive'
 import { matchesGlobalSearch } from '@/utils/search'
 import { collectDescendantTitles, findNodeById } from '@/utils/studyTasksTree'
 import {
   sortEvents,
   sortExhibitions,
-  sortStudents,
-  sortStudyTasks,
-  sortTeachers,
+  sortPeople,
+  sortProjects,
 } from '@/utils/sort'
 
 export type TimelineFilter =
@@ -30,13 +28,12 @@ export type FilterStateSnapshot = {
   alphabet: string | null
   selectedStudyTaskNodeIds: Set<string>
   studentCategory: StudentCategory
-  focusPerson?: { kind: 'student'; id: number } | { kind: 'teacher'; id: number } | null
+  focusPerson?: { kind: 'person'; id: string } | null
 }
 
 export type FilteredResults = {
-  students: Student[]
-  teachers: Teacher[]
-  studyTasks: StudyTaskItem[]
+  people: Person[] // kept for backwards compatibility but not rendered as cards
+  projects: Project[]
   events: ArchiveCollections['events']
   exhibitions: ArchiveCollections['exhibitions']
   total: number
@@ -50,7 +47,6 @@ function includesTimeline(
   if (timeline.kind === 'decade') {
     return 'decade' in item && item.decade === timeline.decade
   }
-  // year filter: events/exhibitions use year; others approximate by decade match.
   if ('year' in item) return item.year === timeline.year
   if ('decade' in item) return item.decade === Math.floor(timeline.year / 10) * 10
   return true
@@ -70,9 +66,8 @@ function matchesStudyTaskTree(
     for (const t of collectDescendantTitles(node)) titles.add(t)
   }
 
-  if (item.type === 'student') return item.studyTasks.some((t) => titles.has(t))
-  if (item.type === 'studyTask')
-    return titles.has(item.category) || (item.subcategory ? titles.has(item.subcategory) : false)
+  if (item.type === 'project')
+    return (item.category ? titles.has(item.category) : false) || (item.subcategory ? titles.has(item.subcategory) : false)
 
   return true
 }
@@ -80,22 +75,40 @@ function matchesStudyTaskTree(
 function matchesPeopleCategories(
   item: Searchable,
   state: FilterStateSnapshot,
+  collections: ArchiveCollections
 ): boolean {
-  if (item.type === 'teacher') {
-    if (state.entityType !== 'teachers' && state.entityType !== 'all') return false
+  if (state.entityType === 'all') return true
+
+  if (item.type === 'project') {
+    const author = collections.people.find(p => p.id === item.authorId)
+    if (!author) return false
+
+    if (state.entityType === 'teachers' && !author.roles.includes('teacher')) return false
+    
+    if (state.entityType === 'students') {
+      if (!author.roles.includes('student')) return false
+      if (state.studentCategory && author.status !== state.studentCategory) return false
+    }
+    return true
   }
-  if (item.type === 'student') {
-    if (state.entityType !== 'students' && state.entityType !== 'all') return false
-    if (state.studentCategory) return item.status === state.studentCategory
+  
+  if (item.type === 'event' || item.type === 'exhibition') {
+    // Usually don't show events/exhibitions when a specific people tab is selected
+    return false
   }
+
   return true
 }
 
-function matchesAlphabet(item: Searchable, alphabet: string | null): boolean {
+function matchesAlphabet(item: Searchable, alphabet: string | null, collections: ArchiveCollections): boolean {
   if (!alphabet) return true
-  if (item.type !== 'student' && item.type !== 'teacher') return true
-  const first = item.lastName[0]?.toLocaleUpperCase() ?? ''
-  return first === alphabet
+  if (item.type === 'project') {
+    const author = collections.people.find(p => p.id === item.authorId)
+    if (!author) return false
+    const first = author.lastName[0]?.toLocaleUpperCase() ?? ''
+    return first === alphabet
+  }
+  return true
 }
 
 export function filterCollections(
@@ -106,65 +119,25 @@ export function filterCollections(
     includesTimeline(item, state.timeline) &&
     matchesGlobalSearch(item, state.query) &&
     matchesStudyTaskTree(item, collections, state.selectedStudyTaskNodeIds) &&
-    matchesPeopleCategories(item, state) &&
-    matchesAlphabet(item, state.alphabet)
+    matchesPeopleCategories(item, state, collections) &&
+    matchesAlphabet(item, state.alphabet, collections)
 
   const focus = state.focusPerson ?? null
 
-  const studentsRaw =
-    state.entityType === 'teachers'
-      ? []
-      : collections.students.filter(basePred).sort(sortStudents)
-  const teachersRaw =
-    state.entityType === 'students'
-      ? []
-      : collections.teachers.filter(basePred).sort(sortTeachers)
+  const projectsRaw = collections.projects.filter(basePred).sort(sortProjects)
+  const eventsRaw = state.entityType === 'all' ? collections.events.filter(basePred).sort(sortEvents) : []
+  const exhibitionsRaw = state.entityType === 'all' ? collections.exhibitions.filter(basePred).sort(sortExhibitions) : []
 
-  const studyTasksRaw =
-    state.entityType === 'all'
-      ? collections.studyTasks.filter(basePred).sort(sortStudyTasks)
-      : []
-  const eventsRaw =
-    state.entityType === 'all'
-      ? collections.events.filter(basePred).sort(sortEvents)
-      : []
-  const exhibitionsRaw =
-    state.entityType === 'all'
-      ? collections.exhibitions.filter(basePred).sort(sortExhibitions)
-      : []
-
-  // Focus mode: clicking a person shows only their works (study themes).
-  const students =
-    focus?.kind === 'student'
-      ? studentsRaw.filter((s) => s.id === focus.id)
-      : focus
-        ? []
-        : studentsRaw
-
-  const teachers =
-    focus?.kind === 'teacher'
-      ? teachersRaw.filter((t) => t.id === focus.id)
-      : focus
-        ? []
-        : teachersRaw
-
-  const studyTasks =
-    focus?.kind === 'student'
-      ? studyTasksRaw.filter((st) => st.studentId === focus.id)
-      : focus?.kind === 'teacher'
-        ? studyTasksRaw.filter((st) => st.teacherId === focus.id)
-        : studyTasksRaw
+  // Focus mode overrides list
+  const projects = focus
+    ? collections.projects.filter((st) => st.authorId === focus.id || st.teacherId === focus.id).sort(sortProjects)
+    : projectsRaw
 
   const events = focus ? [] : eventsRaw
   const exhibitions = focus ? [] : exhibitionsRaw
 
-  const total =
-    students.length +
-    teachers.length +
-    studyTasks.length +
-    events.length +
-    exhibitions.length
+  const total = projects.length + events.length + exhibitions.length
 
-  return { students, teachers, studyTasks, events, exhibitions, total }
+  return { people: [], projects, events, exhibitions, total }
 }
 

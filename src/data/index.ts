@@ -1,6 +1,5 @@
-import studentsJson from '@/data/students.json'
-import teachersJson from '@/data/teachers.json'
-import studyTasksJson from '@/data/studyTasks.json'
+import peopleJson from '@/data/people.json'
+import projectsJson from '@/data/projects.json'
 import eventsJson from '@/data/events.json'
 import exhibitionsJson from '@/data/exhibitions.json'
 import studyTasksTreeJson from '@/data/studyTasksTree.json'
@@ -9,10 +8,9 @@ import type {
   ArchiveCollections,
   Exhibition,
   HistoricalEvent,
-  Student,
-  StudyTaskItem,
+  Person,
+  Project,
   StudyTaskTreeNode,
-  Teacher,
 } from '@/types/archive'
 
 function delay(ms: number) {
@@ -25,13 +23,12 @@ export const archiveApi = {
     // Simulated latency so skeletons make sense.
     await delay(350)
 
-    const students = studentsJson as unknown as Student[]
-    const teachers = teachersJson as unknown as Teacher[]
+    const people = peopleJson as unknown as Person[]
+    const projects = projectsJson as unknown as Project[]
 
     return {
-      students,
-      teachers,
-      studyTasks: studyTasksJson as StudyTaskItem[],
+      people,
+      projects,
       events: eventsJson as HistoricalEvent[],
       exhibitions: exhibitionsJson as Exhibition[],
       studyTasksTree: studyTasksTreeJson as StudyTaskTreeNode,

@@ -1,22 +1,19 @@
 import type {
   Exhibition,
   HistoricalEvent,
-  Student,
-  StudyTaskItem,
-  Teacher,
+  Person,
+  Project,
 } from '@/types/archive'
 
-export function sortStudents(a: Student, b: Student) {
+export function sortPeople(a: Person, b: Person) {
   return a.lastName.localeCompare(b.lastName, 'lv')
 }
 
-export function sortTeachers(a: Teacher, b: Teacher) {
-  return a.lastName.localeCompare(b.lastName, 'lv')
-}
-
-export function sortStudyTasks(a: StudyTaskItem, b: StudyTaskItem) {
+export function sortProjects(a: Project, b: Project) {
   // Newest first within decade, then title
-  return b.decade - a.decade || a.title.localeCompare(b.title, 'lv')
+  const decadeA = a.decade ?? 0
+  const decadeB = b.decade ?? 0
+  return decadeB - decadeA || a.title.localeCompare(b.title, 'lv')
 }
 
 export function sortEvents(a: HistoricalEvent, b: HistoricalEvent) {

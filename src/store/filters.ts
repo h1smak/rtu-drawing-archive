@@ -7,8 +7,7 @@ import type {
 } from '@/utils/filter'
 
 export type FocusPerson =
-  | { kind: 'student'; id: number }
-  | { kind: 'teacher'; id: number }
+  | { kind: 'person'; id: string }
   | null
 
 type FiltersStore = {

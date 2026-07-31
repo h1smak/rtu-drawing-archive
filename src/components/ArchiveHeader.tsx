@@ -12,6 +12,7 @@ export function ArchiveHeader() {
   const setStudentCategory = useFiltersStore((s) => s.setStudentCategory)
   const darkMode = useFiltersStore((s) => s.darkMode)
   const toggleDarkMode = useFiltersStore((s) => s.toggleDarkMode)
+  const focusPerson = useFiltersStore((s) => s.focusPerson)
 
   const showStudentFilters = entityType === 'students'
 
@@ -28,13 +29,15 @@ export function ArchiveHeader() {
 
       <div className="flex flex-col items-stretch gap-2 sm:items-end">
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <Tabs value={entityType} onValueChange={(v) => setEntityType(v as any)}>
-            <TabsList>
-              <TabsTrigger value="all">ALL</TabsTrigger>
-              <TabsTrigger value="students">STUDENTS</TabsTrigger>
-              <TabsTrigger value="teachers">TEACHERS</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          {!focusPerson ? (
+            <Tabs value={entityType} onValueChange={(v) => setEntityType(v as any)}>
+              <TabsList>
+                <TabsTrigger value="all">ALL</TabsTrigger>
+                <TabsTrigger value="students">STUDENTS</TabsTrigger>
+                <TabsTrigger value="teachers">TEACHERS</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          ) : null}
 
           <Button
             type="button"
@@ -48,7 +51,7 @@ export function ArchiveHeader() {
         </div>
 
         <div className="flex flex-wrap justify-end gap-2">
-          {showStudentFilters ? (
+          {!focusPerson && showStudentFilters ? (
             <>
               <Button
                 type="button"
