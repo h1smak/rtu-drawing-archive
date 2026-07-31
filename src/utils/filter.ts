@@ -163,7 +163,7 @@ export function filterCollections(
 
   const basePred = (item: Searchable) =>
     includesTimeline(item, state.timeline) &&
-    matchesGlobalSearch(item, state.query) &&
+    matchesGlobalSearch(item, state.query, collections) &&
     matchesStudyTaskTree(item, collections, state.selectedStudyTaskNodeIds) &&
     (focus ? true : matchesPeopleCategories(item, state, collections)) &&
     (focus ? true : matchesAlphabet(item, state.alphabet, collections))

@@ -15,27 +15,49 @@ function toText(v: unknown): string {
   return String(v)
 }
 
-export function matchesGlobalSearch(item: Searchable, query: string): boolean {
+export function matchesGlobalSearch(item: Searchable, query: string, collections?: import('@/types/archive').ArchiveCollections): boolean {
   const q = normalize(query)
   if (!q) return true
 
   const haystackParts: string[] = []
 
-  if ('firstName' in item) haystackParts.push(item.firstName, item.lastName, item.lifeYears)
   if ('title' in item) haystackParts.push(item.title)
-  if ('description' in item) haystackParts.push(item.description)
+  if ('description' in item && item.description) haystackParts.push(item.description)
+  if ('year' in item && item.year) haystackParts.push(String(item.year))
 
-  // Optional fields by type:
-  if ('studyTasks' in item) haystackParts.push(toText(item.studyTasks))
-  if ('keywords' in item) haystackParts.push(toText(item.keywords))
-  if ('position' in item) haystackParts.push(item.position)
-  if ('specialization' in item) haystackParts.push(item.specialization)
-  if ('graduatedYear' in item) haystackParts.push(String(item.graduatedYear), item.studyPeriod)
-  if ('appointedYear' in item) haystackParts.push(String(item.appointedYear))
-  if ('year' in item) haystackParts.push(String(item.year))
-  if ('category' in item) haystackParts.push(item.category, toText(item.subcategory))
-  if ('teacherId' in item) haystackParts.push(String(item.teacherId))
-  if ('studentId' in item) haystackParts.push(String(item.studentId))
+  if (item.type === 'project') {
+    if (item.studyTheme) haystackParts.push(item.studyTheme)
+    if (item.keyword) haystackParts.push(item.keyword)
+    if (item.category) haystackParts.push(item.category)
+    if (item.subcategory) haystackParts.push(item.subcategory)
+
+    if (collections) {
+      const author = collections.people.find(p => p.id === item.authorId)
+      if (author) {
+        haystackParts.push(author.firstName, author.lastName)
+        if (author.description) haystackParts.push(author.description)
+        if (author.keywords) haystackParts.push(toText(author.keywords))
+        if (author.position) haystackParts.push(author.position)
+        if (author.specialization) haystackParts.push(author.specialization)
+      }
+      
+      if (item.teacherId) {
+        const teacher = collections.people.find(p => p.id === item.teacherId)
+        if (teacher) {
+          haystackParts.push(teacher.firstName, teacher.lastName)
+        }
+      }
+    }
+  }
+
+  if (item.type === 'person') {
+    haystackParts.push(item.firstName, item.lastName)
+    if (item.lifeYears) haystackParts.push(item.lifeYears)
+    if (item.description) haystackParts.push(item.description)
+    if (item.keywords) haystackParts.push(toText(item.keywords))
+    if (item.position) haystackParts.push(item.position)
+    if (item.specialization) haystackParts.push(item.specialization)
+  }
 
   const haystack = normalize(haystackParts.join(' '))
   return haystack.includes(q)
