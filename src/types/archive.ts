@@ -3,7 +3,6 @@ export type EntityType = 'all' | 'students' | 'teachers'
 export type Keywords =
   | 'Architecture'
   | 'Art'
-  | 'Historical events'
   | 'Exhibitions'
 
 export type StudentStatus = 'graduated' | 'undergraduate'
@@ -43,6 +42,7 @@ export type StudyTaskItem = {
   id: number
   type: 'studyTask'
   title: string
+  keyword: Keywords
   category: string
   subcategory: string | null
   decade: number

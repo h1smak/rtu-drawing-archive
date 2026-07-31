@@ -10,13 +10,23 @@ import type { StudyTaskTreeNode } from '@/types/archive'
 function TreeNode({
   node,
   depth,
+  isSearching,
 }: {
   node: StudyTaskTreeNode
   depth: number
+  isSearching?: boolean
 }) {
   const selectedIds = useFiltersStore((s) => s.selectedStudyTaskNodeIds)
   const toggle = useFiltersStore((s) => s.toggleStudyTaskNode)
-  const [open, setOpen] = React.useState(depth < 1)
+  const [open, setOpen] = React.useState(depth < 1 || !!isSearching)
+
+  React.useEffect(() => {
+    if (isSearching) {
+      setOpen(true)
+    } else {
+      setOpen(depth < 1)
+    }
+  }, [isSearching, depth])
 
   const checked = selectedIds.includes(node.id)
   const hasChildren = Boolean(node.children?.length)
@@ -59,7 +69,7 @@ function TreeNode({
             <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
               <div className="mt-1 space-y-1">
                 {node.children?.map((c) => (
-                  <TreeNode key={c.id} node={c} depth={depth + 1} />
+                  <TreeNode key={c.id} node={c} depth={depth + 1} isSearching={isSearching} />
                 ))}
               </div>
             </CollapsibleContent>
@@ -85,11 +95,11 @@ function TreeNode({
   )
 }
 
-export function StudyTaskTree({ root }: { root: StudyTaskTreeNode }) {
+export function StudyTaskTree({ root, isSearching }: { root: StudyTaskTreeNode; isSearching?: boolean }) {
   return (
     <div className="space-y-1">
       {root.children?.map((c) => (
-        <TreeNode key={c.id} node={c} depth={0} />
+        <TreeNode key={c.id} node={c} depth={0} isSearching={isSearching} />
       ))}
     </div>
   )

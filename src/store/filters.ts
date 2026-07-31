@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { EntityType, Keywords } from '@/types/archive'
+import type { EntityType } from '@/types/archive'
 import type {
   StudentCategory,
   TeacherCategory,
@@ -17,7 +17,6 @@ type FiltersStore = {
   timeline: TimelineFilter
   query: string
   alphabet: string | null
-  keywords: Keywords[]
   selectedStudyTaskNodeIds: string[]
   teacherCategory: TeacherCategory
   studentCategory: StudentCategory
@@ -28,8 +27,6 @@ type FiltersStore = {
   setTimeline: (t: TimelineFilter) => void
   setQuery: (q: string) => void
   setAlphabet: (a: string | null) => void
-  toggleKeyword: (keyword: Keywords) => void
-  clearKeywords: () => void
   toggleStudyTaskNode: (id: string) => void
   setTeacherCategory: (cat: TeacherCategory) => void
   setStudentCategory: (cat: StudentCategory) => void
@@ -44,7 +41,6 @@ const defaultState = {
   timeline: { kind: 'all' } as TimelineFilter,
   query: '',
   alphabet: null as string | null,
-  keywords: [] as Keywords[],
   selectedStudyTaskNodeIds: [] as string[],
   teacherCategory: null as TeacherCategory,
   studentCategory: null as StudentCategory,
@@ -68,16 +64,6 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
   setTimeline: (t) => set({ timeline: t }),
   setQuery: (q) => set({ query: q }),
   setAlphabet: (a) => set({ alphabet: a }),
-
-  toggleKeyword: (keyword) =>
-    set((s) => {
-      const has = s.keywords.includes(keyword)
-      const keywords = has
-        ? s.keywords.filter((t) => t !== keyword)
-        : [...s.keywords, keyword]
-      return { keywords }
-    }),
-  clearKeywords: () => set({ keywords: [] }),
 
   toggleStudyTaskNode: (id) =>
     set((s) => {

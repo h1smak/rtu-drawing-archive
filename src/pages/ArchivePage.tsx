@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { archiveApi } from '@/data'
 import { useFiltersStore } from '@/store/filters'
-import type { ArchiveCollections, Keywords } from '@/types/archive'
+import type { ArchiveCollections } from '@/types/archive'
 import { filterCollections } from '@/utils/filter'
 
 function applyDarkModeClass(enabled: boolean) {
@@ -27,7 +27,6 @@ export function ArchivePage() {
   const timeline = useFiltersStore((s) => s.timeline)
   const query = useFiltersStore((s) => s.query)
   const alphabet = useFiltersStore((s) => s.alphabet)
-  const keywordsArr = useFiltersStore((s) => s.keywords)
   const selectedStudyTaskNodeIdsArr = useFiltersStore((s) => s.selectedStudyTaskNodeIds)
   const teacherCategory = useFiltersStore((s) => s.teacherCategory)
   const studentCategory = useFiltersStore((s) => s.studentCategory)
@@ -66,7 +65,6 @@ export function ArchivePage() {
       timeline,
       query,
       alphabet,
-      keywords: new Set(keywordsArr as Keywords[]),
       selectedStudyTaskNodeIds: new Set(selectedStudyTaskNodeIdsArr),
       teacherCategory,
       studentCategory,
@@ -78,7 +76,6 @@ export function ArchivePage() {
     timeline,
     query,
     alphabet,
-    keywordsArr,
     selectedStudyTaskNodeIdsArr,
     teacherCategory,
     studentCategory,

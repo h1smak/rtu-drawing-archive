@@ -25,14 +25,8 @@ export const archiveApi = {
     // Simulated latency so skeletons make sense.
     await delay(350)
 
-    const students = studentsJson.map((student) => ({
-      ...student,
-      keywords: student.keywords,
-    })) as Student[]
-    const teachers = teachersJson.map((teacher) => ({
-      ...teacher,
-      keywords: teacher.keywords,
-    })) as Teacher[]
+    const students = studentsJson as unknown as Student[]
+    const teachers = teachersJson as unknown as Teacher[]
 
     return {
       students,

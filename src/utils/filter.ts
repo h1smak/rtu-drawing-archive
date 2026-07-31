@@ -1,7 +1,6 @@
 import type {
   ArchiveCollections,
   EntityType,
-  Keywords,
   Searchable,
   Student,
   StudyTaskItem,
@@ -30,7 +29,6 @@ export type FilterStateSnapshot = {
   timeline: TimelineFilter
   query: string
   alphabet: string | null
-  keywords: Set<Keywords>
   selectedStudyTaskNodeIds: Set<string>
   teacherCategory: TeacherCategory
   studentCategory: StudentCategory
@@ -58,15 +56,6 @@ function includesTimeline(
   if ('year' in item) return item.year === timeline.year
   if ('decade' in item) return item.decade === Math.floor(timeline.year / 10) * 10
   return true
-}
-
-function matchesKeywords(item: Searchable, selected: Set<Keywords>): boolean {
-  if (selected.size === 0) return true
-  if ('keywords' in item) {
-    return item.keywords.some((t) => selected.has(t))
-  }
-  // Non-keyword entities: allow through only if user did not filter to those keywords.
-  return selected.size === 0
 }
 
 function matchesStudyTaskTree(
@@ -119,7 +108,6 @@ export function filterCollections(
   const basePred = (item: Searchable) =>
     includesTimeline(item, state.timeline) &&
     matchesGlobalSearch(item, state.query) &&
-    matchesKeywords(item, state.keywords) &&
     matchesStudyTaskTree(item, collections, state.selectedStudyTaskNodeIds) &&
     matchesPeopleCategories(item, state) &&
     matchesAlphabet(item, state.alphabet)

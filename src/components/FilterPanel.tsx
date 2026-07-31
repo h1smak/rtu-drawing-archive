@@ -1,25 +1,46 @@
-import { BookOpen, Palette, Users } from 'lucide-react'
+import * as React from 'react'
+import { Search } from 'lucide-react'
 
 import { StudyTaskTree } from '@/components/StudyTaskTree'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useFiltersStore } from '@/store/filters'
-import type { Keywords, StudyTaskTreeNode } from '@/types/archive'
+import type { StudyTaskTreeNode } from '@/types/archive'
 
-const keywordDefs: { key: Keywords; icon: React.ReactNode }[] = [
-  { key: 'Architecture', icon: <Users className="size-4" aria-hidden="true" /> },
-  { key: 'Art', icon: <Palette className="size-4" aria-hidden="true" /> },
-  { key: 'Historical events', icon: <BookOpen className="size-4" aria-hidden="true" /> },
-  { key: 'Exhibitions', icon: <BookOpen className="size-4" aria-hidden="true" /> },
-]
+function filterTree(node: StudyTaskTreeNode, query: string): StudyTaskTreeNode | null {
+  if (!query.trim()) return node
+
+  const q = query.trim().toLowerCase()
+  const isMatch = node.title.toLowerCase().includes(q)
+  if (isMatch) return node
+
+  const filteredChildren = (node.children || [])
+    .map(c => filterTree(c, query))
+    .filter(Boolean) as StudyTaskTreeNode[]
+
+  if (filteredChildren.length > 0) {
+    return {
+      ...node,
+      children: filteredChildren
+    }
+  }
+  return null
+}
 
 export function FilterPanel({ tree }: { tree: StudyTaskTreeNode }) {
-  const keywords = useFiltersStore((s) => s.keywords)
-  const toggleKeyword = useFiltersStore((s) => s.toggleKeyword)
   const selectedStudyTaskNodeIds = useFiltersStore((s) => s.selectedStudyTaskNodeIds)
   const resetAll = useFiltersStore((s) => s.resetAll)
+
+  const [themeSearch, setThemeSearch] = React.useState('')
+
+  const filteredTree = React.useMemo(() => {
+    // tree is the dummy root containing Architecture, Art, Exhibitions
+    const result = filterTree(tree, themeSearch)
+    // If the root is filtered out entirely, return an empty root
+    return result || { id: 'empty-root', title: 'Study Themes', children: [] }
+  }, [tree, themeSearch])
 
   return (
     <aside className="space-y-4">
@@ -31,43 +52,32 @@ export function FilterPanel({ tree }: { tree: StudyTaskTreeNode }) {
       </div>
 
       <div className="rounded-xl border bg-card p-3">
-        <div className="mb-2 flex items-center justify-between gap-2">
-          <div className="text-sm font-medium">Keywords</div>
-          <Badge variant="muted">{keywords.length}</Badge>
-        </div>
-        <div className="space-y-2">
-          {keywordDefs.map((t) => {
-            const checked = keywords.includes(t.key)
-            return (
-              <div key={t.key} className="flex items-center gap-2">
-                <Checkbox
-                  id={`keyword-${t.key}`}
-                  checked={checked}
-                  onCheckedChange={() => toggleKeyword(t.key)}
-                />
-                <label
-                  htmlFor={`keyword-${t.key}`}
-                  className="flex cursor-pointer select-none items-center gap-2 text-sm"
-                >
-                  <span className="text-muted-foreground">{t.icon}</span>
-                  {t.key}
-                </label>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      <div className="rounded-xl border bg-card p-3">
-        <div className="mb-2 flex items-center justify-between gap-2">
+        <div className="mb-3 flex items-center justify-between gap-2">
           <div className="text-sm font-medium">Study Themes</div>
           <Badge variant="muted">{selectedStudyTaskNodeIds.length}</Badge>
         </div>
+        
+        <div className="relative mb-3">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search themes..."
+            className="w-full pl-9"
+            value={themeSearch}
+            onChange={(e) => setThemeSearch(e.target.value)}
+          />
+        </div>
+
         <ScrollArea className="h-[42vh] pr-2">
-          <StudyTaskTree root={tree} />
+          {filteredTree.children && filteredTree.children.length > 0 ? (
+             <StudyTaskTree root={filteredTree as StudyTaskTreeNode} isSearching={themeSearch.trim().length > 0} />
+          ) : (
+             <div className="text-sm text-muted-foreground py-4 text-center">
+               No themes found
+             </div>
+          )}
         </ScrollArea>
       </div>
     </aside>
   )
 }
-
