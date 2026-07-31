@@ -28,7 +28,6 @@ export function ArchivePage() {
   const query = useFiltersStore((s) => s.query)
   const alphabet = useFiltersStore((s) => s.alphabet)
   const selectedStudyTaskNodeIdsArr = useFiltersStore((s) => s.selectedStudyTaskNodeIds)
-  const teacherCategory = useFiltersStore((s) => s.teacherCategory)
   const studentCategory = useFiltersStore((s) => s.studentCategory)
   const darkMode = useFiltersStore((s) => s.darkMode)
   const focusPerson = useFiltersStore((s) => s.focusPerson)
@@ -66,7 +65,6 @@ export function ArchivePage() {
       query,
       alphabet,
       selectedStudyTaskNodeIds: new Set(selectedStudyTaskNodeIdsArr),
-      teacherCategory,
       studentCategory,
       focusPerson,
     })
@@ -77,7 +75,6 @@ export function ArchivePage() {
     query,
     alphabet,
     selectedStudyTaskNodeIdsArr,
-    teacherCategory,
     studentCategory,
     focusPerson,
   ])

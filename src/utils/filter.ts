@@ -21,7 +21,6 @@ export type TimelineFilter =
   | { kind: 'decade'; decade: number }
   | { kind: 'year'; year: number }
 
-export type TeacherCategory = 'Architecture' | 'Art' | null
 export type StudentCategory = 'graduated' | 'undergraduate' | null
 
 export type FilterStateSnapshot = {
@@ -30,7 +29,6 @@ export type FilterStateSnapshot = {
   query: string
   alphabet: string | null
   selectedStudyTaskNodeIds: Set<string>
-  teacherCategory: TeacherCategory
   studentCategory: StudentCategory
   focusPerson?: { kind: 'student'; id: number } | { kind: 'teacher'; id: number } | null
 }
@@ -85,7 +83,6 @@ function matchesPeopleCategories(
 ): boolean {
   if (item.type === 'teacher') {
     if (state.entityType !== 'teachers' && state.entityType !== 'all') return false
-    if (state.teacherCategory) return item.specialization === state.teacherCategory
   }
   if (item.type === 'student') {
     if (state.entityType !== 'students' && state.entityType !== 'all') return false

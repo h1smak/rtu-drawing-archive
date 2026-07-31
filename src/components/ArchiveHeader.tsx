@@ -8,14 +8,11 @@ import { cn } from '@/lib/utils'
 export function ArchiveHeader() {
   const entityType = useFiltersStore((s) => s.entityType)
   const setEntityType = useFiltersStore((s) => s.setEntityType)
-  const teacherCategory = useFiltersStore((s) => s.teacherCategory)
   const studentCategory = useFiltersStore((s) => s.studentCategory)
-  const setTeacherCategory = useFiltersStore((s) => s.setTeacherCategory)
   const setStudentCategory = useFiltersStore((s) => s.setStudentCategory)
   const darkMode = useFiltersStore((s) => s.darkMode)
   const toggleDarkMode = useFiltersStore((s) => s.toggleDarkMode)
 
-  const showTeacherFilters = entityType === 'teachers'
   const showStudentFilters = entityType === 'students'
 
   return (
@@ -51,31 +48,6 @@ export function ArchiveHeader() {
         </div>
 
         <div className="flex flex-wrap justify-end gap-2">
-          {showTeacherFilters ? (
-            <>
-              <Button
-                type="button"
-                size="sm"
-                variant={teacherCategory === 'Architecture' ? 'default' : 'outline'}
-                onClick={() =>
-                  setTeacherCategory(teacherCategory === 'Architecture' ? null : 'Architecture')
-                }
-                className={cn('flex-1 sm:flex-none')}
-              >
-                Architecture
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant={teacherCategory === 'Art' ? 'default' : 'outline'}
-                onClick={() => setTeacherCategory(teacherCategory === 'Art' ? null : 'Art')}
-                className={cn('flex-1 sm:flex-none')}
-              >
-                Art
-              </Button>
-            </>
-          ) : null}
-
           {showStudentFilters ? (
             <>
               <Button

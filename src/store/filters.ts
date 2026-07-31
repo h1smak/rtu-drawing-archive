@@ -3,7 +3,6 @@ import { create } from 'zustand'
 import type { EntityType } from '@/types/archive'
 import type {
   StudentCategory,
-  TeacherCategory,
   TimelineFilter,
 } from '@/utils/filter'
 
@@ -18,7 +17,6 @@ type FiltersStore = {
   query: string
   alphabet: string | null
   selectedStudyTaskNodeIds: string[]
-  teacherCategory: TeacherCategory
   studentCategory: StudentCategory
   focusPerson: FocusPerson
   darkMode: boolean
@@ -28,7 +26,6 @@ type FiltersStore = {
   setQuery: (q: string) => void
   setAlphabet: (a: string | null) => void
   toggleStudyTaskNode: (id: string) => void
-  setTeacherCategory: (cat: TeacherCategory) => void
   setStudentCategory: (cat: StudentCategory) => void
   focusOnPerson: (p: Exclude<FocusPerson, null>) => void
   clearFocusPerson: () => void
@@ -42,7 +39,6 @@ const defaultState = {
   query: '',
   alphabet: null as string | null,
   selectedStudyTaskNodeIds: [] as string[],
-  teacherCategory: null as TeacherCategory,
   studentCategory: null as StudentCategory,
   focusPerson: null as FocusPerson,
   darkMode: false,
@@ -57,7 +53,6 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
       ...s,
       entityType: t,
       alphabet: t === 'all' ? null : s.alphabet,
-      teacherCategory: t === 'students' ? null : s.teacherCategory,
       studentCategory: t === 'teachers' ? null : s.studentCategory,
     }))
   },
@@ -75,10 +70,6 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
       }
     }),
 
-  setTeacherCategory: (cat) =>
-    set((s) => ({
-      teacherCategory: s.entityType === 'students' ? null : cat,
-    })),
   setStudentCategory: (cat) =>
     set((s) => ({
       studentCategory: s.entityType === 'teachers' ? null : cat,
@@ -90,7 +81,6 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
       focusPerson: p,
       entityType: 'all',
       alphabet: null,
-      teacherCategory: null,
       studentCategory: null,
     })),
   clearFocusPerson: () => set({ focusPerson: null }),
