@@ -12,8 +12,12 @@
           "title": "Historical Researches",
           "children": [
             {
-              "id": "historical-surveys",
-              "title": "Historical Surveys"
+              "id": "historical-style-sketches",
+              "title": "Historical Style Sketches"
+            },
+            {
+              "id": "historical-style-presentations",
+              "title": "Historical Style Presentations"
             }
           ]
         },
@@ -48,6 +52,10 @@
                 {
                   "id": "presentation-posters",
                   "title": "Presentation Posters - Framed Works"
+                },
+                {
+                  "id": "interior-presentation-drawings",
+                  "title": "Interior Presentation Drawings"
                 },
                 {
                   "id": "architecture-design-objects",
