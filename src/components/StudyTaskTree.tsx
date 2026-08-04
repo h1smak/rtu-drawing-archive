@@ -7,6 +7,14 @@ import { cn } from '@/lib/utils'
 import { useFiltersStore } from '@/store/filters'
 import type { StudyTaskTreeNode } from '@/types/archive'
 
+function hasSelectedDescendant(node: StudyTaskTreeNode, selectedIds: string[]): boolean {
+  if (selectedIds.includes(node.id)) return true
+  if (node.children) {
+    return node.children.some((child) => hasSelectedDescendant(child, selectedIds))
+  }
+  return false
+}
+
 function TreeNode({
   node,
   depth,
@@ -18,15 +26,20 @@ function TreeNode({
 }) {
   const selectedIds = useFiltersStore((s) => s.selectedStudyTaskNodeIds)
   const toggle = useFiltersStore((s) => s.toggleStudyTaskNode)
-  const [open, setOpen] = React.useState(depth < 1 || !!isSearching)
+
+  const isSelectedOrDescendant = React.useMemo(() => {
+    return hasSelectedDescendant(node, selectedIds)
+  }, [node, selectedIds])
+
+  const [open, setOpen] = React.useState(depth < 1 || !!isSearching || isSelectedOrDescendant)
 
   React.useEffect(() => {
-    if (isSearching) {
+    if (isSearching || isSelectedOrDescendant) {
       setOpen(true)
-    } else {
-      setOpen(depth < 1)
+    } else if (depth >= 1 && selectedIds.length === 0) {
+      setOpen(false)
     }
-  }, [isSearching, depth])
+  }, [isSearching, isSelectedOrDescendant, depth, selectedIds.length])
 
   const checked = selectedIds.includes(node.id)
   const hasChildren = Boolean(node.children?.length)
@@ -37,6 +50,7 @@ function TreeNode({
         className={cn(
           'flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-accent',
           depth === 0 && 'font-medium',
+          checked && 'bg-primary/10 font-medium text-primary'
         )}
         style={{ paddingLeft: 8 + depth * 12 }}
       >
@@ -104,4 +118,3 @@ export function StudyTaskTree({ root, isSearching }: { root: StudyTaskTreeNode; 
     </div>
   )
 }
-

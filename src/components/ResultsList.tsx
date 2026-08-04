@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useFiltersStore } from '@/store/filters'
 import type { ArchiveCollections, Project } from '@/types/archive'
 import type { FilteredResults } from '@/utils/filter'
+import { findNodeForProject } from '@/utils/studyTasksTree'
 
 function SkeletonCard() {
   return (
@@ -30,7 +31,19 @@ export function ResultsList({
   results: FilteredResults | null
 }) {
   const focusOnPerson = useFiltersStore((s) => s.focusOnPerson)
+  const selectStudyTaskNode = useFiltersStore((s) => s.selectStudyTaskNode)
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(null)
+
+  const handleSelectStudyTask = React.useCallback(
+    (title: string, proj?: Project) => {
+      if (!collections) return
+      const node = findNodeForProject(collections.studyTasksTree, title, proj)
+      if (node) {
+        selectStudyTaskNode(node.id)
+      }
+    },
+    [collections, selectStudyTaskNode]
+  )
 
   if (loading) {
     return (
@@ -65,8 +78,31 @@ export function ResultsList({
         
         const subtitle = (
           <span className="flex flex-wrap items-center gap-1">
-            {proj.category && <span>{proj.category}</span>}
-            {proj.subcategory && <span>• {proj.subcategory}</span>}
+            {proj.category && (
+              <span
+                className="cursor-pointer font-medium hover:underline text-foreground/80 hover:text-primary transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSelectStudyTask(proj.category!, proj)
+                }}
+              >
+                {proj.category}
+              </span>
+            )}
+            {proj.subcategory && (
+              <>
+                <span>•</span>
+                <span
+                  className="cursor-pointer font-medium hover:underline text-foreground/80 hover:text-primary transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleSelectStudyTask(proj.subcategory!, proj)
+                  }}
+                >
+                  {proj.subcategory}
+                </span>
+              </>
+            )}
             {author && (
               <>
                 <span>• Author:</span>
@@ -90,6 +126,7 @@ export function ResultsList({
             subtitle={subtitle}
             tags={tags}
             onClick={() => setSelectedProject(proj)}
+            onTagClick={(tag) => handleSelectStudyTask(tag, proj)}
           />
         )
       })}
@@ -118,6 +155,7 @@ export function ResultsList({
         author={selectedAuthor}
         onClose={() => setSelectedProject(null)}
         onAuthorClick={(authorId) => focusOnPerson({ kind: 'person', id: authorId })}
+        onStudyTaskClick={(taskTitle) => handleSelectStudyTask(taskTitle, selectedProject ?? undefined)}
       />
     </div>
   )

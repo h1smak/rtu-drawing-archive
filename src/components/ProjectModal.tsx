@@ -10,9 +10,10 @@ interface ProjectModalProps {
   author?: Person
   onClose: () => void
   onAuthorClick?: (authorId: string) => void
+  onStudyTaskClick?: (taskTitle: string) => void
 }
 
-export function ProjectModal({ project, author, onClose, onAuthorClick }: ProjectModalProps) {
+export function ProjectModal({ project, author, onClose, onAuthorClick, onStudyTaskClick }: ProjectModalProps) {
   const [activeImageIndex, setActiveImageIndex] = React.useState(0)
 
   React.useEffect(() => {
@@ -66,9 +67,29 @@ export function ProjectModal({ project, author, onClose, onAuthorClick }: Projec
             <h2 className="text-xl font-bold leading-tight truncate">{project.title}</h2>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               {project.category && (
-                <span className="font-medium text-foreground/80">{project.category}</span>
+                <button
+                  type="button"
+                  className="font-medium text-foreground/90 hover:text-primary hover:underline transition-colors"
+                  onClick={() => {
+                    onClose()
+                    if (onStudyTaskClick) onStudyTaskClick(project.category!)
+                  }}
+                >
+                  {project.category}
+                </button>
               )}
-              {project.subcategory && <span>• {project.subcategory}</span>}
+              {project.subcategory && (
+                <button
+                  type="button"
+                  className="font-medium text-muted-foreground hover:text-primary hover:underline transition-colors"
+                  onClick={() => {
+                    onClose()
+                    if (onStudyTaskClick) onStudyTaskClick(project.subcategory!)
+                  }}
+                >
+                  • {project.subcategory}
+                </button>
+              )}
               {project.year && (
                 <span className="flex items-center gap-1">
                   • <Calendar className="size-3" /> {project.year}
@@ -143,9 +164,27 @@ export function ProjectModal({ project, author, onClose, onAuthorClick }: Projec
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Category
                   </div>
-                  <div className="text-sm">{project.category}</div>
+                  <button
+                    type="button"
+                    className="text-sm font-medium text-foreground hover:text-primary hover:underline transition-colors block text-left"
+                    onClick={() => {
+                      onClose()
+                      if (onStudyTaskClick) onStudyTaskClick(project.category!)
+                    }}
+                  >
+                    {project.category}
+                  </button>
                   {project.subcategory && (
-                    <div className="text-xs text-muted-foreground">{project.subcategory}</div>
+                    <button
+                      type="button"
+                      className="text-xs text-muted-foreground hover:text-primary hover:underline transition-colors block text-left"
+                      onClick={() => {
+                        onClose()
+                        if (onStudyTaskClick) onStudyTaskClick(project.subcategory!)
+                      }}
+                    >
+                      {project.subcategory}
+                    </button>
                   )}
                 </div>
               )}

@@ -18,11 +18,13 @@ export function ResultCard({
   subtitle,
   tags,
   onClick,
+  onTagClick,
 }: {
   entity: CardEntity
   subtitle?: React.ReactNode
   tags?: string[]
   onClick?: () => void
+  onTagClick?: (tag: string) => void
 }) {
   const isPerson = entity.type === 'person'
   const title =
@@ -111,7 +113,19 @@ export function ResultCard({
         ) : tags?.length ? (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {tags.map((t) => (
-              <Badge key={t} variant="secondary">
+              <Badge
+                key={t}
+                variant="secondary"
+                className={cn(
+                  onTagClick && 'cursor-pointer hover:bg-primary/20 hover:text-primary transition-colors'
+                )}
+                onClick={(e) => {
+                  if (onTagClick) {
+                    e.stopPropagation()
+                    onTagClick(t)
+                  }
+                }}
+              >
                 {t}
               </Badge>
             ))}

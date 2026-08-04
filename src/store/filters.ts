@@ -25,6 +25,8 @@ type FiltersStore = {
   setQuery: (q: string) => void
   setAlphabet: (a: string | null) => void
   toggleStudyTaskNode: (id: string) => void
+  selectStudyTaskNode: (id: string) => void
+  setStudyTaskNodeIds: (ids: string[]) => void
   setStudentCategory: (cat: StudentCategory) => void
   focusOnPerson: (p: Exclude<FocusPerson, null>) => void
   clearFocusPerson: () => void
@@ -69,6 +71,20 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
       }
     }),
 
+  selectStudyTaskNode: (id) =>
+    set((s) => ({
+      ...s,
+      selectedStudyTaskNodeIds: [id],
+      focusPerson: null,
+    })),
+
+  setStudyTaskNodeIds: (ids) =>
+    set((s) => ({
+      ...s,
+      selectedStudyTaskNodeIds: ids,
+      focusPerson: null,
+    })),
+
   setStudentCategory: (cat) =>
     set((s) => ({
       studentCategory: s.entityType === 'teachers' ? null : cat,
@@ -91,4 +107,3 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
       darkMode: !s.darkMode,
     })),
 }))
-
