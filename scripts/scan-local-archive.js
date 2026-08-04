@@ -188,6 +188,129 @@ function findAuthorId(authorStr, peopleList, defaultAuthor) {
   return defaultAuthor
 }
 
+/**
+ * Validates local directory structure against studyTasksTree.json
+ * Reports unrecognized folders and loose images outside expected folders.
+ */
+function validateStructure(rootDir, tree) {
+  const warnings = []
+  if (!fs.existsSync(rootDir) || !tree) return warnings
+
+  // Set of top-level keywords (e.g. Architecture, Art, Exhibitions)
+  const rootKeywords = new Set(
+    (tree.children || []).map(c => (c.keyword || c.title || '').toLowerCase())
+  )
+
+  // Set of all valid titles in studyTasksTree
+  function getAllTreeTitles(node) {
+    let titles = new Set()
+    if (node.title) titles.add(node.title.toLowerCase())
+    if (node.keyword) titles.add(node.keyword.toLowerCase())
+    if (node.children) {
+      for (const child of node.children) {
+        const childTitles = getAllTreeTitles(child)
+        for (const t of childTitles) titles.add(t)
+      }
+    }
+    return titles
+  }
+
+  const allTreeTitles = getAllTreeTitles(tree)
+
+  function checkDir(currentDir, relativePath = '') {
+    if (!fs.existsSync(currentDir)) return
+
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true })
+    const pathParts = relativePath.split(path.sep).filter(Boolean)
+    const depth = pathParts.length
+
+    const subdirs = entries.filter(e => e.isDirectory())
+    const imageFiles = entries.filter(e => e.isFile() && IMAGE_EXTENSIONS.has(path.extname(e.name).toLowerCase()))
+
+    // Depth 0: Root directory (SCAN_DIR)
+    if (depth === 0) {
+      for (const img of imageFiles) {
+        warnings.push({
+          type: 'LOOSE_IMAGE_AT_ROOT',
+          path: path.join(currentDir, img.name),
+          issue: `Image file "${img.name}" is placed directly in root archive directory, outside any Keyword folder (Architecture, Art, Exhibitions).`
+        })
+      }
+
+      for (const dir of subdirs) {
+        const folderLower = dir.name.toLowerCase()
+        if (!rootKeywords.has(folderLower) && !allTreeTitles.has(folderLower)) {
+          warnings.push({
+            type: 'UNRECOGNIZED_KEYWORD_FOLDER',
+            path: path.join(currentDir, dir.name),
+            issue: `Folder "${dir.name}" in root directory does not match any expected Keyword (Architecture, Art, Exhibitions) in studyTasksTree.json.`
+          })
+        }
+        checkDir(path.join(currentDir, dir.name), path.join(relativePath, dir.name))
+      }
+      return
+    }
+
+    // Depth 1: Top-level Keyword folder (e.g. Architecture)
+    if (depth === 1) {
+      for (const img of imageFiles) {
+        warnings.push({
+          type: 'LOOSE_IMAGE_AT_KEYWORD',
+          path: path.join(currentDir, img.name),
+          issue: `Image file "${img.name}" is placed directly inside top-level folder "${pathParts[0]}" instead of inside a category/subcategory folder.`
+        })
+      }
+
+      for (const dir of subdirs) {
+        const folderLower = dir.name.toLowerCase()
+        if (!allTreeTitles.has(folderLower)) {
+          warnings.push({
+            type: 'UNRECOGNIZED_CATEGORY_FOLDER',
+            path: path.join(currentDir, dir.name),
+            issue: `Folder "${dir.name}" inside "${pathParts[0]}" does not match any category in studyTasksTree.json.`
+          })
+        }
+        checkDir(path.join(currentDir, dir.name), path.join(relativePath, dir.name))
+      }
+      return
+    }
+
+    // Depth >= 2: Category / Subcategory folder
+    const folderName = pathParts[depth - 1]
+    const folderLower = folderName.toLowerCase()
+
+    // Flag images placed directly in a folder alongside subfolders (outside subcategory folders)
+    if (subdirs.length > 0 && imageFiles.length > 0) {
+      for (const img of imageFiles) {
+        warnings.push({
+          type: 'IMAGE_OUTSIDE_SUBCATEGORY_FOLDER',
+          path: path.join(currentDir, img.name),
+          issue: `Image file "${img.name}" is placed at folder level "${folderName}" alongside subfolders, instead of inside a specific subcategory folder.`
+        })
+      }
+    }
+
+    for (const dir of subdirs) {
+      const childLower = dir.name.toLowerCase()
+      // Check if subfolder exists in studyTasksTree
+      if (!allTreeTitles.has(childLower)) {
+        // If parent folder is in tree, but this subfolder is not in tree:
+        if (allTreeTitles.has(folderLower)) {
+          warnings.push({
+            type: 'UNRECOGNIZED_SUBFOLDER',
+            path: path.join(currentDir, dir.name),
+            issue: `Subfolder "${dir.name}" under "${folderName}" does not match any expected category/subcategory in studyTasksTree.json.`
+          })
+        }
+      }
+      checkDir(path.join(currentDir, dir.name), path.join(relativePath, dir.name))
+    }
+  }
+
+  checkDir(rootDir, '')
+  return warnings
+}
+
 function scanDirectory(dirPath, relativePath = '', globalPattern, globalPatternStr) {
   let results = []
   if (!fs.existsSync(dirPath)) return results
@@ -404,6 +527,26 @@ function main() {
     process.exit(1)
   }
 
+  // 1. Structure Check against studyTasksTree.json
+  if (studyTasksTree) {
+    const warnings = validateStructure(SCAN_DIR, studyTasksTree)
+    console.log('\n======================================================================')
+    console.log('             FOLDER STRUCTURE VALIDATION (studyTaskTree)')
+    console.log('======================================================================')
+    if (warnings.length === 0) {
+      console.log('✓ Directory structure matches studyTasksTree.json perfectly!')
+    } else {
+      console.log(`\n[!] Found ${warnings.length} folder structure warning(s):\n`)
+      warnings.forEach((w, i) => {
+        console.log(`  ${i + 1}. [${w.type}]`)
+        console.log(`     Path:  ${w.path}`)
+        console.log(`     Issue: ${w.issue}\n`)
+      })
+    }
+    console.log('======================================================================\n')
+  }
+
+  // 2. Scan projects
   const projects = scanDirectory(SCAN_DIR, '', globalPattern, globalPatternStr)
   const totalImages = projects.reduce((acc, p) => acc + (p.images ? p.images.length : 0), 0)
 

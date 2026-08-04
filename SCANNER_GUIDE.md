@@ -15,15 +15,47 @@ npm run scan
 
 What this does:
 1. Scans `E:\db_pictures` recursively across the root folders (`Architecture`, `Art`, `Exhibitions`).
-2. Automatically maps subfolders to categories and subcategories matching `studyTasksTree.json`.
-3. Detects multi-picture projects and groups their images under a single project item (`images: [...]`).
-4. Cleans up file names into human-readable titles.
-5. Updates `src/data/projects.json`.
-6. Streams images directly to your local web app at `http://localhost:5173/rtu-drawing-archive/` via Vite middleware.
+2. **Validates folder structure** against `studyTasksTree.json` and reports any extra/unrecognized folders or loose images.
+3. Automatically maps subfolders to categories and subcategories matching `studyTasksTree.json`.
+4. Detects multi-picture projects and groups their images under a single project item (`images: [...]`).
+5. Cleans up file names into human-readable titles.
+6. Updates `src/data/projects.json`.
+7. Streams images directly to your local web app at `http://localhost:5173/rtu-drawing-archive/` via Vite middleware.
 
 ---
 
-## 2. Multi-Picture Projects (Multi-Image Grouping)
+## 2. Folder Structure Validation (`studyTasksTree.json`)
+
+When you run `npm run scan`, the script automatically compares your hard drive directory hierarchy (`E:\db_pictures`) against `src/data/studyTasksTree.json`.
+
+If any directory structural mistakes are detected, they are printed to the console with their exact file paths and problem explanations:
+
+### Checked Structure Anomalies
+
+1. **Unrecognized Subfolders (`UNRECOGNIZED_SUBFOLDER`):**
+   * Occurs when a folder on the hard drive does not exist in `studyTasksTree.json`.
+   * **Console Example:**
+     ```text
+     [UNRECOGNIZED_SUBFOLDER]
+     Path:  E:\db_pictures\Architecture\Presentation Drawings\Architect's Design Studio Drawings (Alumni)\Hybrid Visualisations
+     Issue: Subfolder "Hybrid Visualisations" under "Architect's Design Studio Drawings (Alumni)" does not match any expected category/subcategory in studyTasksTree.json.
+     ```
+
+2. **Loose Images Outside Subcategory Folders (`IMAGE_OUTSIDE_SUBCATEGORY_FOLDER`):**
+   * Occurs when image files are placed directly inside a category folder alongside subfolders, instead of inside their respective subcategory folder.
+   * **Console Example:**
+     ```text
+     [IMAGE_OUTSIDE_SUBCATEGORY_FOLDER]
+     Path:  E:\db_pictures\Art\Humans in the Environment\Human Scale in Interior\IMG_20260702_194001.jpg
+     Issue: Image file "IMG_20260702_194001.jpg" is placed at folder level "Human Scale in Interior" alongside subfolders, instead of inside a specific subcategory folder.
+     ```
+
+3. **Loose Images in Archive Root / Keyword Folders:**
+   * Flags image files placed directly in `E:\db_pictures\` root or directly under `Architecture/` / `Art/` outside of category folders.
+
+---
+
+## 3. Multi-Picture Projects (Multi-Image Grouping)
 
 Projects that consist of multiple images (e.g. multiple sheets, pages, parts, or views of the same project) are automatically merged into a **single project entry** containing an array of image URLs (`images: ["...", "..."]`), sorted in natural order (sheet 1, 2, ..., 10).
 
@@ -68,7 +100,7 @@ All images in that folder will be grouped under this single project entry.
 
 ---
 
-## 3. Setting a Custom Archive Folder Path
+## 4. Setting a Custom Archive Folder Path
 
 By default, the script scans `E:/db_pictures`. If your images are located on another drive or folder, pass the path via the `ARCHIVE_IMAGES_PATH` environment variable:
 
@@ -84,7 +116,7 @@ set ARCHIVE_IMAGES_PATH=D:\my_drawings && npm run scan
 
 ---
 
-## 4. Applying Filename Patterns (`--pattern`)
+## 5. Applying Filename Patterns (`--pattern`)
 
 If your files follow a consistent naming format, pass a `--pattern` argument so the script automatically extracts metadata (year, author, title, category, subcategory, sheet/page) directly from filenames.
 
@@ -122,41 +154,9 @@ npm run scan -- --pattern="{year}_{author}_{title}_{sheet}"
   * **Title:** `Doma Laukums`
   * **Sheet:** `01`
 
-#### Example 2: `{year}_{title}_p{page}`
-```bash
-npm run scan -- --pattern="{year}_{title}_p{page}"
-```
-* **Filename:** `1923_Bockslaff Facade Proposal_p1.jpg`
-* **Extracted Metadata:**
-  * **Year:** `1923`
-  * **Title:** `Bockslaff Facade Proposal`
-  * **Page:** `1`
-
-#### Example 3: `{author}-{year}-{title}`
-```bash
-npm run scan -- --pattern="{author}-{year}-{title}"
-```
-* **Filename:** `Eglīte-2005-Sculpture Study.png`
-* **Extracted Metadata:**
-  * **Author:** `Līga Eglīte` (ID `p_002`)
-  * **Year:** `2005`
-  * **Title:** `Sculpture Study`
-
 ---
 
-### Using Regular Expression Patterns
-
-For complex filename structures, pass a full Regular Expression wrapped in `/.../i`:
-
-```bash
-npm run scan -- --pattern="/^(?<year>\d{4})_(?<author>[^_]+)_(?<title>.+)_(?<sheet>\d+)$/i"
-```
-
-The script reads named capture groups (`?<year>`, `?<author>`, `?<title>`, `?<category>`, `?<subcategory>`, `?<sheet>`, `?<page>`, `?<part>`, `?<seq>`, `?<index>`).
-
----
-
-## 5. Folder-Level Overrides (`info.json`)
+## 6. Folder-Level Overrides (`info.json`)
 
 You can place an `info.json` file inside any specific folder in your archive to provide metadata overrides or directory-specific file patterns:
 
@@ -175,7 +175,7 @@ If `info.json` exists in a folder, its metadata values and file pattern will aut
 
 ---
 
-## 6. Automatic Fallback Behavior
+## 7. Automatic Fallback Behavior
 
 If a filename pattern is configured but an individual file does not match the pattern (e.g. `IMG_20260219_114811.jpg`), **the scanner does not crash or skip the file**. 
 
@@ -187,9 +187,10 @@ Instead, it falls back to standard extraction:
 
 ---
 
-## 7. Workflow Summary
+## 8. Workflow Summary
 
 1. Add or organize your images inside `E:\db_pictures\`.
 2. Run `npm run scan` (or `npm run scan -- --pattern="..."`).
-3. Start or view your web app (`npm run dev`).
-4. Browse all updated drawings and multi-picture project carousels/galleries instantly!
+3. Check the console output for any **Folder Structure Validation** warnings.
+4. Start or view your web app (`npm run dev`).
+5. Browse all updated drawings and multi-picture project carousels/galleries instantly!
