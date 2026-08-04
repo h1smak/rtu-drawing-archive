@@ -656,22 +656,22 @@
     "subcategory": "Architecture Design Objects"
   },
   {
-    "id": "proj_local_Architecture_Presentation_Drawings_Architectural_Final_Presentations_Site_Plans_V_PAVILS_1994_img_20260710_1",
+    "id": "proj_local_Architecture_Presentation_Drawings_Architectural_Final_Presentations_Site_Plans_img_20260710_1",
     "type": "project",
     "title": "IMG 20260710",
-    "description": "Archival item from RTU collection (Site Plans - V.PAVILS-1994)",
+    "description": "Archival item from RTU collection (Architectural Final Presentations - Site Plans)",
     "authorId": "p_001",
-    "year": 1994,
-    "decade": 1990,
+    "year": 2020,
+    "decade": 2020,
     "images": [
-      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/V.PAVILS-1994/IMG_20260710_153104.jpg",
-      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/V.PAVILS-1994/IMG_20260710_160237.jpg",
-      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/V.PAVILS-1994/IMG_20260710_160249.jpg"
+      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/IMG_20260710_153104.jpg",
+      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/IMG_20260710_160237.jpg",
+      "/archive-images/Architecture/Presentation Drawings/Architectural Final Presentations/Site Plans/IMG_20260710_160249.jpg"
     ],
-    "studyTheme": "Site Plans",
+    "studyTheme": "Architectural Final Presentations",
     "keyword": "Architecture",
-    "category": "Site Plans",
-    "subcategory": "V.PAVILS-1994"
+    "category": "Architectural Final Presentations",
+    "subcategory": "Site Plans"
   },
   {
     "id": "proj_local_Architecture_Presentation_Drawings_Architecture_Theme_Design_Visualizations_Family_House_img_20260706_1",
@@ -4840,7 +4840,14 @@
     "year": 2020,
     "decade": 2020,
     "images": [
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195317.jpg"
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_194001.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_194527.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195309.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195317.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195342.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195352.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_195404.jpg",
+      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/Long Term Drawings/IMG_20260702_212441.jpg"
     ],
     "studyTheme": "Human Scale in Interior",
     "keyword": "Art",
@@ -4895,29 +4902,6 @@
     "keyword": "Art",
     "category": "Human Scale in Interior",
     "subcategory": "Sketches"
-  },
-  {
-    "id": "proj_local_Art_Humans_in_the_Environment_Human_Scale_in_Interior_img_20260702_1",
-    "type": "project",
-    "title": "IMG 20260702",
-    "description": "Archival item from RTU collection (Humans in the Environment - Human Scale in Interior)",
-    "authorId": "p_001",
-    "year": 2020,
-    "decade": 2020,
-    "images": [
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_194001.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_194527.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_195309.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_195342.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_195352.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_195404.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_205902.jpg",
-      "/archive-images/Art/Humans in the Environment/Human Scale in Interior/IMG_20260702_212441.jpg"
-    ],
-    "studyTheme": "Humans in the Environment",
-    "keyword": "Art",
-    "category": "Humans in the Environment",
-    "subcategory": "Human Scale in Interior"
   },
   {
     "id": "proj_local_Art_Humans_in_the_Environment_Human_Scale_in_Urban_or_Rural_Landscape_Long_Term_Drawings_img_20260702_1",

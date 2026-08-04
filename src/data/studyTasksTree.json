@@ -172,6 +172,10 @@
                   "title": "Free Hand Visualizations"
                 },
                 {
+                  "id": "studio-hybrid-visualizations",
+                  "title": "Hybrid Visualisations"
+                },
+                {
                   "id": "studio-digital-visualizations",
                   "title": "Digital Visualisations"
                 }
@@ -413,6 +417,10 @@
             {
               "id": "fantasy-hand-drawing",
               "title": "Hand Drawing"
+            },
+            {
+              "id": "fantasy-hybrid-drawing",
+              "title": "Hybrid Drawing"
             },
             {
               "id": "fantasy-digital-drawing",
