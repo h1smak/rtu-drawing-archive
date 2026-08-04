@@ -1,7 +1,9 @@
+import * as React from 'react'
+import { ProjectModal } from '@/components/ProjectModal'
 import { ResultCard } from '@/components/ResultCard'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useFiltersStore } from '@/store/filters'
-import type { ArchiveCollections } from '@/types/archive'
+import type { ArchiveCollections, Project } from '@/types/archive'
 import type { FilteredResults } from '@/utils/filter'
 
 function SkeletonCard() {
@@ -28,6 +30,7 @@ export function ResultsList({
   results: FilteredResults | null
 }) {
   const focusOnPerson = useFiltersStore((s) => s.focusOnPerson)
+  const [selectedProject, setSelectedProject] = React.useState<Project | null>(null)
 
   if (loading) {
     return (
@@ -53,6 +56,7 @@ export function ResultsList({
   }
 
   const personById = new Map(collections.people.map((p) => [p.id, p]))
+  const selectedAuthor = selectedProject ? personById.get(selectedProject.authorId) : undefined
 
   return (
     <div className="space-y-3">
@@ -79,7 +83,15 @@ export function ResultsList({
         )
 
         const tags = [proj.category, proj.subcategory].filter((x): x is string => Boolean(x))
-        return <ResultCard key={`project-${proj.id}`} entity={proj} subtitle={subtitle} tags={tags} />
+        return (
+          <ResultCard
+            key={`project-${proj.id}`}
+            entity={proj}
+            subtitle={subtitle}
+            tags={tags}
+            onClick={() => setSelectedProject(proj)}
+          />
+        )
       })}
 
       {results.events.map((e) => (
@@ -99,7 +111,14 @@ export function ResultsList({
           tags={['Exhibitions']}
         />
       ))}
+
+      {/* Project Multi-Image Modal Carousel Lightbox */}
+      <ProjectModal
+        project={selectedProject}
+        author={selectedAuthor}
+        onClose={() => setSelectedProject(null)}
+        onAuthorClick={(authorId) => focusOnPerson({ kind: 'person', id: authorId })}
+      />
     </div>
   )
 }
-

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Calendar, GraduationCap, User2 } from 'lucide-react'
 
+import { ImageCarousel } from '@/components/ImageCarousel'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import type { Exhibition, HistoricalEvent, Person, Project } from '@/types/archive'
@@ -29,13 +30,14 @@ export function ResultCard({
       ? `${entity.firstName} ${entity.lastName}`
       : entity.title
 
+  const hasMultipleImages = entity.type === 'project' && entity.images && entity.images.length > 1
   const image = 'image' in entity ? entity.image : ('images' in entity ? entity.images?.[0] : undefined)
 
   return (
     <article
       className={cn(
         'group overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:shadow-md',
-        onClick && 'cursor-pointer',
+        onClick && 'cursor-pointer'
       )}
       tabIndex={onClick ? 0 : undefined}
       role={onClick ? 'button' : undefined}
@@ -48,20 +50,29 @@ export function ResultCard({
         }
       }}
     >
-      <div className="relative aspect-[16/9] w-full bg-muted">
-        {image ? (
+      <div className="relative aspect-[16/9] w-full bg-muted overflow-hidden">
+        {hasMultipleImages ? (
+          <ImageCarousel
+            images={entity.images}
+            title={title}
+            showCounter={true}
+            showControlsOnHover={true}
+            aspectRatioClass="aspect-[16/9]"
+          />
+        ) : image ? (
           <img
             src={image}
-            alt=""
+            alt={title}
             className="h-full w-full object-cover"
             onError={(e) => {
               ;(e.currentTarget as HTMLImageElement).style.display = 'none'
             }}
           />
-        ) : null}
-        <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-muted-foreground/70">
-          {!image && fallbackInitials(title)}
-        </div>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-muted-foreground/70">
+            {fallbackInitials(title)}
+          </div>
+        )}
       </div>
 
       <div className="p-4">
@@ -116,4 +127,3 @@ export function ResultCard({
     </article>
   )
 }
-

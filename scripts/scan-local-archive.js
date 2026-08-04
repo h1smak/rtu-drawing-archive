@@ -41,6 +41,49 @@ function cleanTitle(filename) {
     .trim() || nameWithoutExt
 }
 
+function extractBaseTitleAndSheet(text) {
+  if (!text) return { baseTitle: '', sheetId: null }
+  let titleStr = text
+  if (titleStr.includes('.')) {
+    titleStr = path.parse(titleStr).name
+  }
+
+  // 1. Suffixes with delimiters or keywords:
+  // e.g. _01, _002, -1, -02, _p1, _p2, _page1, _sheet1, _part1, (1), (2)
+  const delimRegex = /^(.*?)(?:[_\-\s]+(?:p|page|sheet|part|seq|index)?\(?(\d+|[a-zA-Z])\)?|\((\d+)\))$/i
+  const delimMatch = titleStr.match(delimRegex)
+
+  if (delimMatch) {
+    const rawBase = delimMatch[1].trim()
+    const sheetNum = delimMatch[2] || delimMatch[3]
+    if (rawBase && sheetNum) {
+      return {
+        baseTitle: cleanTitle(rawBase),
+        sheetId: sheetNum
+      }
+    }
+  }
+
+  // 2. Trailing digits attached to word, e.g. SitePlan01, Drawing1
+  const attachedRegex = /^(.*?[a-zA-ZĀ-žа-яА-Я])(\d{1,3})$/i
+  const attachedMatch = titleStr.match(attachedRegex)
+  if (attachedMatch) {
+    const rawBase = attachedMatch[1].trim()
+    const sheetNum = attachedMatch[2]
+    if (rawBase && sheetNum) {
+      return {
+        baseTitle: cleanTitle(rawBase),
+        sheetId: sheetNum
+      }
+    }
+  }
+
+  return {
+    baseTitle: cleanTitle(titleStr),
+    sheetId: null
+  }
+}
+
 function extractYear(text) {
   const match = text.match(/\b(18\d{2}|19\d{2}|20[0-2]\d)\b/)
   if (match) {
@@ -97,7 +140,7 @@ function parsePattern(patternStr) {
     }
   }
 
-  // Convert template tokens like {year}, {author}, {title}, {category}, {subcategory}
+  // Convert template tokens like {year}, {author}, {title}, {category}, {subcategory}, {sheet}, {page}, {part}, {seq}, {index}
   let regexStr = patternStr
     .replace(/([.*+?^${}()|[\]\\])/g, (match, char) => {
       if (char === '{' || char === '}') return char
@@ -109,6 +152,11 @@ function parsePattern(patternStr) {
     .replace(/\{title\}/gi, '(?<title>.+)')
     .replace(/\{category\}/gi, '(?<category>[^_\\-]+)')
     .replace(/\{subcategory\}/gi, '(?<subcategory>[^_\\-]+)')
+    .replace(/\{sheet\}/gi, '(?<sheet>[^_\\-]+)')
+    .replace(/\{page\}/gi, '(?<page>[^_\\-]+)')
+    .replace(/\{part\}/gi, '(?<part>[^_\\-]+)')
+    .replace(/\{seq\}/gi, '(?<seq>[^_\\-]+)')
+    .replace(/\{index\}/gi, '(?<index>[^_\\-]+)')
 
   try {
     return new RegExp(`^${regexStr}$`, 'i')
@@ -196,27 +244,30 @@ function scanDirectory(dirPath, relativePath = '', globalPattern, globalPatternS
     }
 
     const defaultAuthor = peopleList[0]?.id || 'p_001'
-    const folderPatternStr = infoMetaData?.filePattern || globalPatternStr
     const folderPattern = infoMetaData?.filePattern ? parsePattern(infoMetaData.filePattern) : globalPattern
 
-    imageFiles.forEach(({ entry, relPath }, index) => {
+    // Map of projectKey -> grouped project info & image list
+    const projectGroups = new Map()
+
+    imageFiles.forEach(({ entry, relPath }) => {
       const filename = entry.name
-      const nameWithoutExt = path.parse(filename).name
       const webUrl = `/archive-images/${relPath.replace(/\\/g, '/')}`
       
-      let title = infoMetaData?.title
+      let rawTitle = infoMetaData?.title
       let fileYear = infoMetaData?.year
       let authorId = infoMetaData?.authorId
       let categoryOverride = null
       let subcategoryOverride = null
+      let extractedSheetId = null
 
-      // If pattern is provided, attempt pattern extraction
+      // Pattern extraction if folder/global pattern matches
       if (folderPattern) {
+        const nameWithoutExt = path.parse(filename).name
         const match = nameWithoutExt.match(folderPattern)
         if (match && match.groups) {
           const g = match.groups
-          if (g.title && !title) {
-            title = cleanTitle(g.title)
+          if (g.title && !rawTitle) {
+            rawTitle = g.title
           }
           if (g.year && !fileYear) {
             const parsedYear = parseInt(g.year, 10)
@@ -227,18 +278,36 @@ function scanDirectory(dirPath, relativePath = '', globalPattern, globalPatternS
           }
           if (g.category) categoryOverride = g.category
           if (g.subcategory) subcategoryOverride = g.subcategory
+          if (g.sheet || g.page || g.part || g.seq || g.index) {
+            extractedSheetId = g.sheet || g.page || g.part || g.seq || g.index
+          }
         }
       }
 
-      // Fallback flow if metadata fields were not set by pattern
+      // Extract base title and sheet number
+      let title = ''
+      let sheetId = extractedSheetId
+
+      if (rawTitle) {
+        const parsed = extractBaseTitleAndSheet(rawTitle)
+        title = parsed.baseTitle
+        if (!sheetId) sheetId = parsed.sheetId
+      } else {
+        const parsed = extractBaseTitleAndSheet(filename)
+        title = parsed.baseTitle
+        if (!sheetId) sheetId = parsed.sheetId
+      }
+
+      // Fallback for empty title or purely numeric title without metadata
+      if (!title || /^\d+$/.test(title)) {
+        const folderName = pathParts[pathParts.length - 1] || 'Drawing'
+        title = cleanTitle(folderName)
+      }
+
       if (!fileYear) {
         fileYear = extractYear(filename) || extractYear(relativePath) || 2020
       }
       const decade = Math.floor(fileYear / 10) * 10
-
-      if (!title) {
-        title = cleanTitle(filename)
-      }
 
       if (!authorId) {
         authorId = defaultAuthor
@@ -247,23 +316,72 @@ function scanDirectory(dirPath, relativePath = '', globalPattern, globalPatternS
       const finalCategory = categoryOverride || category
       const finalSubcategory = subcategoryOverride || subcategory
 
+      // Key to group images belonging to the exact same project
+      let projectKey
+      if (infoMetaData?.singleProject) {
+        projectKey = `folder_single_project_${relativePath}`
+      } else {
+        projectKey = `${authorId}::${fileYear}::${finalCategory}::${finalSubcategory || ''}::${title.toLowerCase()}`
+      }
+
+      if (!projectGroups.has(projectKey)) {
+        projectGroups.set(projectKey, {
+          title,
+          description: infoMetaData?.description || `Archival item from RTU collection (${finalCategory}${finalSubcategory ? ' - ' + finalSubcategory : ''})`,
+          authorId,
+          year: fileYear,
+          decade,
+          studyTheme: finalCategory,
+          keyword,
+          category: finalCategory,
+          subcategory: finalSubcategory,
+          images: []
+        })
+      }
+
+      projectGroups.get(projectKey).images.push({ webUrl, filename, sheetId })
+    })
+
+    // Convert grouped projects into final Project objects
+    let groupIndex = 0
+    for (const [, group] of projectGroups.entries()) {
+      groupIndex++
+
+      // Sort images naturally by sheetId or filename (1, 2, ..., 10)
+      group.images.sort((a, b) => {
+        if (a.sheetId && b.sheetId) {
+          const numA = parseInt(a.sheetId, 10)
+          const numB = parseInt(b.sheetId, 10)
+          if (!isNaN(numA) && !isNaN(numB)) {
+            return numA - numB
+          }
+          return a.sheetId.localeCompare(b.sheetId, undefined, { numeric: true, sensitivity: 'base' })
+        }
+        return a.filename.localeCompare(b.filename, undefined, { numeric: true, sensitivity: 'base' })
+      })
+
+      const imageUrls = group.images.map(img => img.webUrl)
+      const titleSlug = group.title.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').substring(0, 30)
+      const folderIdPart = pathParts.join('_').replace(/[^a-zA-Z0-9]/g, '_')
+      const projectId = `proj_local_${folderIdPart}_${titleSlug || groupIndex}_${groupIndex}`
+
       const projectObj = {
-        id: `proj_local_${pathParts.join('_').replace(/[^a-zA-Z0-9]/g, '_')}_${index + 1}`,
+        id: projectId,
         type: 'project',
-        title: title,
-        description: infoMetaData?.description || `Archival item from RTU collection (${finalCategory}${finalSubcategory ? ' - ' + finalSubcategory : ''})`,
-        authorId: authorId,
-        year: fileYear,
-        decade: decade,
-        images: [webUrl],
-        studyTheme: finalCategory,
-        keyword: keyword,
-        category: finalCategory,
-        subcategory: finalSubcategory
+        title: group.title,
+        description: group.description,
+        authorId: group.authorId,
+        year: group.year,
+        decade: group.decade,
+        images: imageUrls,
+        studyTheme: group.studyTheme,
+        keyword: group.keyword,
+        category: group.category,
+        subcategory: group.subcategory
       }
 
       results.push(projectObj)
-    })
+    }
   }
 
   return results
@@ -287,7 +405,9 @@ function main() {
   }
 
   const projects = scanDirectory(SCAN_DIR, '', globalPattern, globalPatternStr)
-  console.log(`Found ${projects.length} project image(s) in local archive.`)
+  const totalImages = projects.reduce((acc, p) => acc + (p.images ? p.images.length : 0), 0)
+
+  console.log(`Found ${projects.length} project(s) containing ${totalImages} total image(s) in local archive.`)
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(projects, null, 2), 'utf-8')
   console.log(`Successfully updated ${OUTPUT_FILE}`)
