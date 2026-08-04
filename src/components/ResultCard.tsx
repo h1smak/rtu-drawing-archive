@@ -30,8 +30,10 @@ export function ResultCard({
       ? `${entity.firstName} ${entity.lastName}`
       : entity.title
 
-  const hasMultipleImages = entity.type === 'project' && entity.images && entity.images.length > 1
   const image = 'image' in entity ? entity.image : ('images' in entity ? entity.images?.[0] : undefined)
+  const images = entity.type === 'project' && entity.images && entity.images.length > 0
+    ? entity.images
+    : image ? [image] : []
 
   return (
     <article
@@ -51,22 +53,14 @@ export function ResultCard({
       }}
     >
       <div className="relative aspect-[16/9] w-full bg-muted overflow-hidden">
-        {hasMultipleImages ? (
+        {images.length > 0 ? (
           <ImageCarousel
-            images={entity.images}
+            images={images}
             title={title}
-            showCounter={true}
+            showCounter={images.length > 1}
+            showZoomControls={false}
             showControlsOnHover={true}
             aspectRatioClass="aspect-[16/9]"
-          />
-        ) : image ? (
-          <img
-            src={image}
-            alt={title}
-            className="h-full w-full object-cover"
-            onError={(e) => {
-              ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-            }}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-muted-foreground/70">

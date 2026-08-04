@@ -103,6 +103,7 @@ export function ProjectModal({ project, author, onClose, onAuthorClick }: Projec
             initialIndex={activeImageIndex}
             showThumbnails={isMulti}
             showCounter={isMulti}
+            showZoomControls={true}
             aspectRatioClass="aspect-[16/10] max-h-[60vh]"
           />
 
