@@ -172,7 +172,7 @@ export function filterCollections(
 
   // Focus mode overrides list
   const projects = focus
-    ? projectsRaw.filter((st) => st.authorId === focus.id || st.teacherId === focus.id)
+    ? projectsRaw.filter((st) => st.authorId === focus.id)
     : projectsRaw
 
   const events = focus ? [] : eventsRaw

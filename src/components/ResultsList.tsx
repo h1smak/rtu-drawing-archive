@@ -58,7 +58,6 @@ export function ResultsList({
     <div className="space-y-3">
       {results.projects.map((proj) => {
         const author = personById.get(proj.authorId)
-        const teacher = proj.teacherId ? personById.get(proj.teacherId) : null
         
         const subtitle = (
           <span className="flex flex-wrap items-center gap-1">
@@ -72,17 +71,6 @@ export function ResultsList({
                   onClick={(e) => { e.stopPropagation(); focusOnPerson({ kind: 'person', id: author.id }) }}
                 >
                   {author.firstName} {author.lastName}
-                </span>
-              </>
-            )}
-            {teacher && (
-              <>
-                <span>• Teacher:</span>
-                <span 
-                  className="cursor-pointer font-medium hover:underline text-primary" 
-                  onClick={(e) => { e.stopPropagation(); focusOnPerson({ kind: 'person', id: teacher.id }) }}
-                >
-                  {teacher.firstName} {teacher.lastName}
                 </span>
               </>
             )}

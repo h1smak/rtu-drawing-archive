@@ -40,13 +40,6 @@ export function matchesGlobalSearch(item: Searchable, query: string, collections
         if (author.position) haystackParts.push(author.position)
         if (author.specialization) haystackParts.push(author.specialization)
       }
-      
-      if (item.teacherId) {
-        const teacher = collections.people.find(p => p.id === item.teacherId)
-        if (teacher) {
-          haystackParts.push(teacher.firstName, teacher.lastName)
-        }
-      }
     }
   }
 

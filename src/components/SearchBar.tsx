@@ -18,7 +18,7 @@ export function SearchBar() {
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search names, titles, descriptions, study themes, teachers, keywords, years…"
+          placeholder="Search names, titles, descriptions, study themes, keywords, years…"
           className="pl-9 pr-10"
           aria-label="Search archive"
         />

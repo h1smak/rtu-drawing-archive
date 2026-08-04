@@ -37,7 +37,6 @@ export type Project = {
   title: string
   description: string
   authorId: string
-  teacherId?: string | null
   year?: number
   decade?: number
   images: string[]

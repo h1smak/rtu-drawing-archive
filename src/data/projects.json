@@ -7,7 +7,6 @@
     "authorId": "p_003",
     "year": 2023,
     "decade": 2020,
-    "teacherId": "p_002",
     "images": [
       "/assets/proj_001_a.jpg",
       "/assets/proj_001_b.jpg"
@@ -25,7 +24,6 @@
     "authorId": "p_004",
     "year": 2022,
     "decade": 2020,
-    "teacherId": "p_001",
     "images": [
       "/assets/proj_002_a.jpg"
     ],
@@ -42,7 +40,6 @@
     "authorId": "p_001",
     "year": 1995,
     "decade": 1990,
-    "teacherId": null,
     "images": [
       "/assets/proj_003_a.jpg"
     ],
@@ -59,7 +56,6 @@
     "authorId": "p_003",
     "year": 2021,
     "decade": 2020,
-    "teacherId": "p_001",
     "images": [
       "/assets/proj_004_a.jpg",
       "/assets/proj_004_b.jpg"
@@ -77,7 +73,6 @@
     "authorId": "p_001",
     "year": 1994,
     "decade": 1990,
-    "teacherId": "p_002",
     "images": [
       "/assets/proj_005_a.jpg"
     ],
