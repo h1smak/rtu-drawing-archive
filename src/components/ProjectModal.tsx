@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { Calendar, User2, X, Images } from 'lucide-react'
 import { ImageCarousel } from '@/components/ImageCarousel'
 import { Badge } from '@/components/ui/badge'
@@ -52,7 +53,7 @@ export function ProjectModal({ project, author, onClose, onAuthorClick, onStudyT
 
   const isMulti = project.images.length > 1
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-6 animate-in fade-in duration-200"
       onClick={onClose}
@@ -192,6 +193,7 @@ export function ProjectModal({ project, author, onClose, onAuthorClick, onStudyT
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
