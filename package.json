@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "scan": "node scripts/scan-local-archive.js",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
